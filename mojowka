@@ -62,7 +62,14 @@ unless (-d $IMAGE_DIR) {
 }
 
 # i18n
-plugin 'charset' => { 'charset' => 'utf-8' };
+## https://github.com/mojolicious/mojo/commit/503dec92a504a68165d62ad4cc22f5c05f5e6a9a#diff-58aa583130bcb90490b462f556b92f86
+app->types->type(html => 'text/html;charset=utf-8');
+app->renderer->encoding('utf-8');
+app->hook(
+  before_dispatch => sub {
+    shift->req->default_charset('utf-8')->url->query->charset('utf-8');
+  }
+);
 plugin 'textdomain' => {
     'domain'      => 'mojowka',
     'search_dirs' => [ 'locale' ],
