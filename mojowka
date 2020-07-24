@@ -49,18 +49,6 @@ our $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", undef, undef, {sqlite_unico
 our $txt = Text::Textile->new;
     $txt->charset('utf-8');
 
-# Image base URL
-our $IMAGE_BASE
-    = $ENV{'MOJOWKA_IMAGE_BASE'}
-    || '/images';
-
-# Directory to save image files
-# http://d.hatena.ne.jp/yukikimoto/20100212/1265989676
-my $IMAGE_DIR  = ${app->static->paths}[0] . $IMAGE_BASE;
-unless (-d $IMAGE_DIR) {
-    mkpath $IMAGE_DIR or die "Cannot create directory: $IMAGE_DIR";
-}
-
 # i18n
 ## https://github.com/mojolicious/mojo/commit/503dec92a504a68165d62ad4cc22f5c05f5e6a9a#diff-58aa583130bcb90490b462f556b92f86
 app->types->type(html => 'text/html;charset=utf-8');
@@ -154,7 +142,6 @@ get '/tags/:tag' => sub {
 
     return $self->render(
         'tag'       => $tag,
-        'base'      => $IMAGE_BASE,
         'rows'      => $rows,
     );
 };
@@ -166,14 +153,10 @@ any '/edit/:id'   => [ id => qr/\d+/ ] => \&edit_article;
 any '/edit/:id'   => [ id => 'new'   ] => \&edit_article;
 any '/create/*title'                 => \&edit_article;
 
-post '/images/*title'                => \&upload_image;
-
 any '/delete/:id' => [ id => qr/\d+/ ] => \&delete_article;
 
 # Other requests
 under sub { 1 };
-
-get '/images/*title' => 'imagestitle';
 
 get '/*title'       => \&get_article;
 get '/'               => \&get_article;
@@ -445,80 +428,6 @@ sub search {
 } # sub search
 
 
-=head2 upload_image
-
-Upload image file.
-See L<http://d.hatena.ne.jp/yukikimoto/20100212/1265989676> for more details. 
-
-=cut
-
-sub upload_image {
-    my $self  = shift;
-    my $title = $self->param('title') || time;
-       $title =~ s/\.\w{3,4}$//i; # Trim extension when presented. Images have 3 or 4 letter extension
-
-    my $image = $self->req->upload('file');
-    
-    # Nothing uploaded
-    return $self->render(
-        'template' => 'error',
-        'title'    => b( __ 'Upload failed' )->decode( 'UTF-8' ),
-        'errors'   => [ __ 'File is not specified.' ],
-    )
-        unless $image;
-    
-    # Skip oversized
-    return $self->render(
-        'template' => 'error',
-        'title'    => b( __ 'Upload failed' )->decode( 'UTF-8' ),
-        'errors'   => [ __ 'Image size is too large.' ],
-    )
-        if $ENV{'MOJO_MAX_MESSAGE_SIZE'}
-        && $ENV{'MOJO_MAX_MESSAGE_SIZE'} < $image->size;
-    
-    
-    # Check file type
-    my %exts = ( 'image/gif' => 'gif', 'image/jpeg' => 'jpg', 'image/png' => 'png' );
-    my $image_type  = $image->headers->content_type;
-    
-    # Extention
-    my $ext = $exts{$image_type}
-        or
-        # Content type is wrong
-        return $self->render(
-            template => 'error',
-            message  => __ 'Upload failed. Content type is wrong.'
-        );
-    
-    # Image file
-    my $image_file = "$IMAGE_DIR/$title.$ext";
-    
-    # If file is exists, Retry creating filename
-    my $i = 0;
-    $image_file = "$IMAGE_DIR/$title." . $i++ . ".$ext"
-        while -f $image_file;
-
-    my $image_link = substr( $image_file, length $IMAGE_DIR );
-
-    # Save to file
-    $image->move_to($image_file);
-    
-    $dbh->do(
-        q{INSERT INTO image (filename) VALUES(?)},
-        {},
-        $image_link,
-    );
-
-    $self->render(
-        'title'    => b( __ 'Image uploaded' )->decode( 'UTF-8' ),
-        'base'     => $IMAGE_BASE,
-        'link'     => $image_link,
-        'template' => 'upload_image',
-    );
-    
-} # sub upload_image
-
-
 =head2  set_language
 
 Set preferred language.
@@ -572,7 +481,7 @@ __DATA__
 % layout 'default', 'title' => __x '{tag} tagged images', 'tag' => $tag;
 <ul class="gallery">
 % for my $row ( @$rows ) {
-    <li><a href="<%= url_for( $base . '/' . $row->{'filename'} ) %>"><img src="<%= url_for ( $base . '/tn/' . $row->{'filename'} ) %>" alt="<%= $row->{'text'}%>"></a></li>
+    <li><a href="<%= url_for( 'nati-base' . '/' . $row->{'filename'} ) %>"><img src="<%= url_for ( 'nati-base' . '/tn/' . $row->{'filename'} ) %>" alt="<%= $row->{'text'}%>"></a></li>
 % }
 </ul>
 
@@ -594,15 +503,6 @@ __DATA__
 </ol>
 
 
-@@ upload_image.html.ep
-% layout 'default';
-%# my $base = param 'base';
-<p><%= __x 'Image uploaded and saved as {link}', 'link' => url_for $link %>
-<br><img src="<%= url_for "$base/$link" %>" alt="<%= __ 'Just uploaded' %>"></p>
-<p><%= __ 'You can insert this image to pages with following code:' %></p>
-<blockquote><code>!<%= url_for "$base/$link" %>!</code></blockquote>
-
-
 @@ not_found.html.ep
 % layout 'error';
 % stash 'title' => __ 'Not Found - ERROR 404';
@@ -611,20 +511,6 @@ __DATA__
 % my $article_title = param 'title';
 <li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
 <li><a href="<%= url_for "/create/$article_title" %>"><%== __x 'Create page &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
-</ul>
-
-
-@@ imagestitle.html.ep
-% layout 'error';
-% stash 'title' => 'Not Found - ERROR 404';
-<h1><%= __ 'Not found' %></h1><p><%= __ 'Image you requested was not found.' %></p>
-<ul>
-% my $article_title = param 'title';
-% my $base          = param 'base';
-<li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
-<li><form action="<%= url_for "$base/$article_title" %>" method="post" enctype ="multipart/form-data"><%= __ 'Choose an image' %>
-<input type="file" name="file"> <%= __ 'and' %>
-<input type="submit" value="<%= __ 'Upload' %>"></form></li>
 </ul>
 
 
