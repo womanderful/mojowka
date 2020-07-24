@@ -88,51 +88,6 @@ app->hook( 'before_routes' => sub {
 
 # any '/' => sub { shift->redirect_to( '/index' ) };
 
-# For security reasons User can login only via POST
-get  '/login' => 'login';
-post '/login' => sub {
-    my $self  = shift;
-    my $login    = $self->param('login')    || '';
-
-    my $password = $self->param('password') || '';
-       $password = b($password)->md5_sum;
-
-    my $redirect
-        = $self->param('redirect')
-#        || $self->req->env('HTTP_REFERER')
-        || '/';
-
-    if ( $login ) {
-
-        my $row = $dbh->selectrow_hashref(
-            q{SELECT id FROM user WHERE login=? AND password=?},
-            {},
-            $login, $password
-        );
-
-        if ( $row ) {
-            $self->session( 'login' => $login );
-            $self->flash( 'message' => __ 'Thanks for logging in' );
-        }
-        else {
-            $self->flash( 'message' => __ 'Wrong username or password' );
-            $redirect = '/login';
-        }
-    }
-    else {
-          $redirect = '/login';
-    } # else
-
-    $self->redirect_to( $redirect );
-};
-
-get '/logout' => sub {
-    my $self = shift;
-    $self->session( 'expires' => 1 );
-    my $redirect = $self->param('redirect') || '/';
-    $self->redirect_to( $redirect );
-}; # => 'logout';
-
 get '/set_language'           => \&set_language;
 get '/set_language/:language' => \&set_language;
 
@@ -207,22 +162,6 @@ get '/tags/:tag' => sub {
 get '/search/:query' => \&search;
 get '/search'        => \&search;
 
-# Authentication
-under sub {
-    my $self = shift;
-
-    # Authenticated
-    return 1
-        if $self->session( 'login' );
-
-    # Not authenticated
-    $self->flash( 'message' => __ 'You are not logged in' );
-    $self->render(
-        'status'   => 401,
-    );
-    return;
-};
-
 any '/edit/:id'   => [ id => qr/\d+/ ] => \&edit_article;
 any '/edit/:id'   => [ id => 'new'   ] => \&edit_article;
 any '/create/*title'                 => \&edit_article;
@@ -231,19 +170,11 @@ post '/images/*title'                => \&upload_image;
 
 any '/delete/:id' => [ id => qr/\d+/ ] => \&delete_article;
 
-get '/userlist'       => \&get_userlist;
-
-# Change password
-get  '/change_password/:id' => [ id => qr/\d+/ ] => 'change_password';
-get  '/change_password'     =>  'change_password';
-post '/change_password'     => \&change_password;
-
 # Other requests
 under sub { 1 };
 
 get '/images/*title' => 'imagestitle';
 
-get '/profile/:login' => \&get_user;
 get '/*title'       => \&get_article;
 get '/'               => \&get_article;
 
@@ -460,62 +391,6 @@ sub delete_article {
     } # if deleted
 } # sub delete_article
 
-=head2 get_user
-
-Get user's profile
-
-=cut
-
-sub get_user {
-    my $self = shift;
-    my $login   = $self->param('login') || return;
-
-    my $row = $dbh->selectrow_hashref(
-        q{SELECT text FROM user WHERE login=?},
-        {},
-        $login,
-    );
-
-    return $self->render(
-        'text'   => markup( b( $row->{'text'} )->decode('UTF-8')->to_string ),
-        'title'  => $login,
-        'layout' => 'default',
-    ) if $row;
-
-} # sub get_user
-
-=head2 get_userlist
-
-Get list of registered users
-
-=cut
-
-sub get_userlist {
-    my $self  = shift;
-    my $login = $self->session( 'login' );
-
-    my $row = $dbh->selectrow_hashref(
-        q{SELECT 1 FROM user WHERE login=? AND is_admin=1},
-        {},
-        $login,
-    );
-
-    if ($row) {
-        my $rows = $dbh->selectall_arrayref(
-            q{SELECT login FROM user},
-            { Slice => {} },
-        );
-        return $self->render(
-            'rows'     => $rows,
-            'layout'   => 'default',
-            'template' => 'userlist',
-        ) 
-    }
-    # else
-    $self->flash( 'message' => __ 'Permission denied' );
-    $self->redirect_to( '/login' );
-} # sub get_userlist
-
 =head2 search
 
 Search pages by title and content
@@ -568,61 +443,6 @@ sub search {
         'title'            => b( $title )->decode('UTF-8'),
     );
 } # sub search
-
-
-=head2 change_password
-
-Change password of specified user
-
-=cut
-
-sub change_password {
-    my $self = shift;
-    my $login = $self->session( 'login' );
-    my $redirect = '/change_password'; # Default redirect - to form
-
-    my $old_password        = $self->param( 'old_password' )        || '';
-    my $new_password        = $self->param( 'new_password' )        || '';
-    my $repeat_new_password = $self->param( 'repeat_new_password' ) || '';
-
-    if ( $new_password ne $repeat_new_password ) {
-        $self->flash( 'message' => __ 'Passwords does not match' );
-        $self->redirect_to( $redirect );
-        return;
-    }
-
-    # else
-    # Check old password
-    my $row = $dbh->selectrow_hashref(
-        q{SELECT id FROM user WHERE login=? AND password=?},
-        {},
-        $login, b($old_password)->md5_sum
-    );
-
-    # Wrong old password
-    unless ( $row ) {
-        $self->flash( 'message' => __ 'Wrong old password' );
-        $self->redirect_to( $redirect );
-        return;
-    }
-
-    my $rows_affected = $dbh->do(
-        q{UPDATE user SET password=? WHERE id=?},
-        {},
-        b($new_password)->md5_sum, $row->{'id'},
-    );
-    
-    if ( $rows_affected ) {
-        $self->flash( 'message' => __ 'Password was changed' );
-        $redirect = "/profile/$login";
-    }
-    else {
-        $self->flash( 'message' => __ 'Can not change password' );
-    }
-
-    $self->redirect_to( $redirect );
-
-} # sub change_password
 
 
 =head2 upload_image
@@ -720,96 +540,6 @@ __DATA__
 %= $text
 
 
-@@ userlist.html.ep
-% layout 'default', 'title' => __ 'User list';
-<ul>
-% foreach my $row (@$rows) {
-    <li><a href="<%= url_for "/profile/$row->{'login'}" %>"><%= $row->{'login'} %></a></li>
-% }
-</ul>
-
-@@ login.html.ep
-% layout 'default';
-% stash 'title' => __ 'Login';
-<form method="post" action="<%= url_for '/login' %>">
-<dl>
-<dt><%= __ 'Username' %></dt><dd><input type="text" name="login"></dd>
-<dt><%= __ 'Password' %></dt><dd><input type="password" name="password"></dd>
-</dl>
-<input type="submit" value="<%= __ 'Login' %>">
-</form>
-%# } # else
-
-
-@@ change_password.html.ep
-% layout 'default';
-%= include 'jquery';
-<script type="text/javascript">
-    function compare_passwords(){
-        if ( $('#new_password').val() == $('#repeat_new_password').val() ) {
-            $('#matching').html( '' );
-            return true;
-        }
-        $('#matching').html('<%= __ 'Passwords does not match' %>');
-        return false;
-    }
-
-    $(document).ready(function() {
-
-        // Check strength and matching
-        $('#new_password').change(function() {
-            compare_passwords();
-            // Strong password must be at least 8 characters long
-            // and must contain letters in other cases, digits and punctuation signs
-            var np = $('#new_password').val();
-            var strength = '<%= __ 'Strong password' %>';
-
-            if ( np.length == 0 ) {
-                strength = '<%= __ 'Empty password' %>';
-            }
-            else if ( np.length < 8 ) {
-                strength = '<%= __ 'Too short password' %>';
-            }
-            else if ( np == '<%= session 'login' %>' ) {
-                strength = '<%= __ 'Password and login are equal' %>';
-            }
-            else if ( ! np.match(/\d/)  ) {
-                strength = '<%= __ 'Missing digits' %>';
-            }
-            else if ( ! np.match(/[a-z]/)  ) {
-                strength = '<%= __ 'Missing small letters' %>';
-            }
-            else if ( ! np.match(/[A-Z]/)  ) {
-                strength = '<%= __ 'Missing capital letters' %>';
-            }
-            $('#strength').html( strength );
-        });
-
-        // Only check matching when change last field
-        $('#repeat_new_password').change(function() {
-            compare_passwords();
-        });
-
-        // Prevent sending wrong data
-        $('#password_form').submit(function() {
-            return compare_passwords();
-        });
-    });
-</script>
-% stash 'title' => __ 'Change password';
-<form method="post" id="password_form">
-<dl>
-<dt><%= __ 'Old Password' %></dt><dd><input type="password" name="old_password"></dd>
-<dt><%= __ 'New Password' %></dt><dd><input type="password" name="new_password" id="new_password">
-<em class="tip" id="strength"></em></dd>
-<dt><%= __ 'Repeat new password' %></dt><dd><input type="password" name="repeat_new_password" id="repeat_new_password">
-<em class="tip" id="matching"></em></dd>
-</dl>
-<input type="submit" value="<%= __ 'Change' %>">
-</form>
-%# } # else
-
-
 @@ sitemap.html.ep
 % layout 'default', 'title' => __ 'Sitemap';
 <ul>
@@ -824,7 +554,6 @@ __DATA__
 <ul>
 <li><a href="<%= url_for '/search'  %>"><%= __ 'Search' %></a></li>
 <li><a href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
-<li><a href="<%= url_for '/login'   %>"><%= __ 'Login' %></a></li>
 </ul>
 
 
@@ -881,9 +610,7 @@ __DATA__
 <ul>
 % my $article_title = param 'title';
 <li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
-% if ( session 'login' ) {
 <li><a href="<%= url_for "/create/$article_title" %>"><%== __x 'Create page &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
-% }
 </ul>
 
 
@@ -895,11 +622,9 @@ __DATA__
 % my $article_title = param 'title';
 % my $base          = param 'base';
 <li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
-% if ( session 'login' ) {
 <li><form action="<%= url_for "$base/$article_title" %>" method="post" enctype ="multipart/form-data"><%= __ 'Choose an image' %>
 <input type="file" name="file"> <%= __ 'and' %>
 <input type="submit" value="<%= __ 'Upload' %>"></form></li>
-% }
 </ul>
 
 
@@ -1045,17 +770,6 @@ button:hover{border-color:#69c}
         <div id="message"><%= b( $message )->decode('UTF-8')->to_string %></div>
 % }
 
-% if ( my $login = session 'login' ) {
-        <ul id="logged">
-            <li><%= __ 'Logged as' %> <a
-                href="<%= url_for "/profile/$login" %>"><%= $login %></a></li>
-            <li><a href="<%= url_for '/change_password' %>"><%= __ 'Change password' %></a></li>
-            <li><a href="<%= url_for '/logout' %>"><%= __ 'Logout' %></a></li>
-%            if ( my $id = stash 'id' ) {
-                <li><a href="<%= url_for "/edit/$id" %>"><%= __ 'Edit this page' %></a></li>
-%            }
-        </ul>
-% }
     <h1><%= $title %></h1>
     <%= content %>
     </body>
