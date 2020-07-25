@@ -34,20 +34,12 @@ use Mojo::ByteStream 'b';
 use Mojo::Log;
 use Text::Textile;
 
-
 our $VERSION=0.05;
 
 my $log = Mojo::Log->new;
-
-my $dbfile
-    = $ENV{'MOJOWKA_DATAFILE'}
-    || 'data.sqlite';
-
-#our $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", undef, undef);
+my $dbfile = $ENV{'MOJOWKA_DATAFILE'} || 'data.sqlite';
 our $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", undef, undef, {sqlite_unicode => 1});
-
-our $txt = Text::Textile->new;
-    $txt->charset('utf-8');
+our $txt = Text::Textile->new; $txt->charset('utf-8');
 
 # i18n
 ## https://github.com/mojolicious/mojo/commit/503dec92a504a68165d62ad4cc22f5c05f5e6a9a#diff-58aa583130bcb90490b462f556b92f86
@@ -71,14 +63,10 @@ app->hook( 'before_routes' => sub {
 });
 
 
-
 # Routes
-
-# any '/' => sub { shift->redirect_to( '/index' ) };
 
 get '/set_language'           => \&set_language;
 get '/set_language/:language' => \&set_language;
-
 
 post '/preview' => sub {
     my $self = shift;
@@ -113,13 +101,11 @@ any '/delete/:id' => [ id => qr/\d+/ ] => \&delete_article;
 
 # Other requests
 under sub { 1 };
-
-get '/*title'       => \&get_article;
-get '/'               => \&get_article;
+get '/*title'                          => \&get_article;
+get '/'                                => \&get_article;
 
 app->types->type( 'html' => 'text/html; charset=utf-8' );
 app->secrets([ 'mojoWka' ]);
-
 app->start( @ARGV ? @ARGV : 'daemon' );
 
 END { my $rc = $dbh->disconnect }
@@ -152,7 +138,7 @@ sub markup {
 #    $log->debug("Textiling of $_");
     return $txt->process( $_ );
 
-} # sub markup
+}
 
 
 =head2 get_article
@@ -185,7 +171,7 @@ sub get_article {
         'id'     => $row->{'id'},
     );
 
-} # sub get_article
+}
 
 
 =head2 edit_article
@@ -222,7 +208,7 @@ sub edit_article {
             ) {
                 push ( @errors, __ 'Title must be unique' );
                 last TRY;
-            } # if
+            }
 
             # is content empty?
             unless ( $article_content ) {
@@ -230,7 +216,7 @@ sub edit_article {
                 last TRY;
             }
 
-        } # TRY
+        }
 
         if ( @errors ) {
             return $self->render(
@@ -241,8 +227,7 @@ sub edit_article {
                 'article_content'   => $article_content,
                 'article_title'     => b( $article_title )->decode( 'UTF-8' ),
             );
-        } # if errors
-        # else OK
+        }
 
         my $rows_affected = 0;
         if ( $id ) { # edit
@@ -251,14 +236,14 @@ sub edit_article {
                 {},
                 $article_title, $article_content, $id
             )
-        } # if exists
+        }
         else { # new page
             $rows_affected = $dbh->do(
                 q{INSERT INTO page VALUES(NULL, ?, ?)},
                 {},
                 $article_title, $article_content,
             )
-        } # else new
+        }
 
         if ( $rows_affected ) {
             $article_title =~ tr/ /_/;
@@ -278,7 +263,7 @@ sub edit_article {
             'article_title'     => b( $article_title )->decode( 'UTF-8' ),
         );
 
-    } # if POST
+    }
 
     if ( $id ) { # existing record
         my $row = $dbh->selectrow_hashref(q{SELECT * FROM page WHERE id=?}, {}, $id);
@@ -293,8 +278,8 @@ sub edit_article {
                 'article_title'     => $article_title,
                 'old_title'         => $article_title,
             );
-        } # if $row
-    } # if $id
+        }
+    }
     else { # new record
         $article_title =~ tr/_/ /;
         return $self->render(
@@ -304,8 +289,8 @@ sub edit_article {
             'article_content'   => '',
             'article_title'     => b( $article_title )->decode( 'UTF-8' ),
         );
-    } # else
-} # sub edit_article
+    }
+}
 
 
 =head2 delete_article
@@ -327,8 +312,8 @@ sub delete_article {
     if ( $rows_affected == 1 ) { # deleted without errors
         $self->flash( 'message' => __ 'Page was deleted' );
         $self->redirect_to( '/' );
-    } # if deleted
-} # sub delete_article
+    }
+}
 
 =head2 search
 
@@ -355,7 +340,7 @@ sub search {
             $query =~ tr/ /_/;
             $self->redirect_to( "/$query" );
             return;
-        } # if row
+        }
 
         $rows = $dbh->selectcol_arrayref(
             q{SELECT title FROM page WHERE LOWER(title) LIKE LOWER(?) OR LOWER(text) LIKE LOWER(?) ORDER BY LOWER(title)},
@@ -373,7 +358,7 @@ sub search {
             $row = b( $row )->decode('UTF-8');
         }
 
-    } # if query
+    }
 
     return $self->render(
         'template'         => 'search',
@@ -381,7 +366,7 @@ sub search {
         'rows'             => $rows,
         'title'            => b( $title )->decode('UTF-8'),
     );
-} # sub search
+}
 
 
 =head2  set_language
@@ -396,7 +381,7 @@ sub set_language {
     my $self = shift;
     $self->session( 'language' => $self->param( 'language' ) );
     $self->redirect_to( $self->req->headers->referrer || '/' );
-} # sub set_language
+}
 
 __DATA__
 
@@ -528,7 +513,7 @@ button:hover{border-color:#69c}
         <li><%= b( $error )->decode('UTF-8')->to_string %></li>
 %   }
     </ul>
-% } # if
+% }
 
 <form method="post" action="<%= url_for "/edit/$id" %>">
 <dl>
