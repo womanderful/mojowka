@@ -24,7 +24,7 @@ it under the same terms as Perl itself.
 
 use utf8;
 use Mojolicious::Lite;
-use Locale::TextDomain qw( mojowka locale );
+use Locale::TextDomain qw/mojowka locale/;
 no warnings 'redefine';
 
 use File::Basename 'basename';
@@ -37,7 +37,7 @@ our $VERSION=0.05;
 
 my $log = Mojo::Log->new;
 my $DATADIR = $ENV{'MOJOWKA_DATADIR'} || '/var/lib/mojowka';
-our $txt = Text::Textile->new; $txt->charset('utf-8');
+our $txt = Text::Textile->new; $txt->charset ('utf-8');
 my $index_text = <<'EOF';
 Welcome to mojowka-didi
 
@@ -50,11 +50,11 @@ EOF
 
 # i18n
 ## https://github.com/mojolicious/mojo/commit/503dec92a504a68165d62ad4cc22f5c05f5e6a9a#diff-58aa583130bcb90490b462f556b92f86
-app->types->type(html => 'text/html;charset=utf-8');
-app->renderer->encoding('utf-8');
-app->hook(
+app->types->type (html => 'text/html;charset=utf-8');
+app->renderer->encoding ('utf-8');
+app->hook (
   before_dispatch => sub {
-    shift->req->default_charset('utf-8')->url->query->charset('utf-8');
+    shift->req->default_charset ('utf-8')->url->query->charset ('utf-8');
   }
 );
 plugin 'textdomain' => {
@@ -63,11 +63,12 @@ plugin 'textdomain' => {
     'available_languages' => [ 'en', 'ru' ],
     'default_language'    => 'en',
 };
-
-app->hook( 'before_routes' => sub {
+app->hook ('before_routes' => sub {
     my $self = shift;
-    $self->set_language( $self->session( 'language' ) || $self->detect_language );
+    $self->set_language ($self->session ('language') || $self->detect_language);
 });
+app->types->type ('html' => 'text/html; charset=utf-8');
+app->secrets (['mojoWka-didi']);
 
 
 # Routes
@@ -77,21 +78,19 @@ get '/set_language/:language' => \&set_language;
 
 post '/preview' => sub {
     my $self = shift;
-    my $text = $self->param('article') || return;
-    $self->render( 'text' => markup( $text ) );
+    my $text = $self->param ('article') || return;
+    $self->render ('text' => markup ($text));
 };
 
 get '/sitemap' => sub {
     my $self = shift;
 
     my $rows = [ grep { 'index' ne $_ } map { basename $_ } glob "$DATADIR/*" ];
-
-    foreach my $row ( @$rows ) {
-        $row = b( $row )->decode('UTF-8')->to_string;
+    foreach my $row (@$rows) {
+        $row = b ($row)->decode ('UTF-8')->to_string;
     }
-
-    return $self->render(
-        'rows'             => $rows,
+    return $self->render (
+        'rows' => $rows,
     );
 };
 
@@ -99,22 +98,17 @@ get '/search/:query'                   => \&search;
 get '/search'                          => \&search;
 any '/edit/#title'                     => \&edit_article;
 any '/delete/#title'                   => \&delete_article;
-
-# Other requests
-under sub { 1 };
 get '/#title'                          => \&get_article;
 get '/'                                => \&get_article;
 
-app->types->type( 'html' => 'text/html; charset=utf-8' );
-app->secrets([ 'mojoWka' ]);
-app->start( @ARGV ? @ARGV : 'daemon' );
+app->start (@ARGV ? @ARGV : 'daemon');
 
 
 =head1 FUNCTIONS
 
 =head2 markup
 
-Convert lightweight markup into HTML
+Convert lightweight markup into HTML.
 
 =cut
 
@@ -134,15 +128,15 @@ sub markup {
         sprintf q{"%s":/%s}, $text, $link;
     }gex;
 
-#    $log->debug("Textiling of $_");
-    return $txt->process( $_ );
+#    $log->debug ("Textiling of $_");
+    return $txt->process ($_);
 
 }
 
 
 =head2 create_index
 
-Create the landing page
+Create the landing page.
 
 =cut
 
@@ -162,20 +156,19 @@ sub create_index {
 
 =head2 get_article
 
-Get article by title
+Get article by title.
 
 =cut
 
 sub get_article {
     my $self  = shift;
-    my $title = $self->param('title') || '';
+    my $title = $self->param ('title') || '';
 
     if (!$title) {
-        $log->debug ('no title');
         if (!-e "$DATADIR/index") {
             $log->debug ('index page does not exist');
             if (!create_index) {
-                return $self->render(
+                return $self->render (
                     'template' => 'internal_server_error',
                     'action'   => 'opening or writing',
                     'status'   => 500,
@@ -183,7 +176,7 @@ sub get_article {
             }
             $log->debug ('index page created');
         }
-        return $self->redirect_to( "/index" );
+        return $self->redirect_to ('/index');
     }
 
     $title = basename $title;
@@ -191,14 +184,14 @@ sub get_article {
     my $file = "$DATADIR/$title";
     $log->debug ("file is '$file'");
 
-    return $self->render(
+    return $self->render (
         'template' => 'not_found',
     ) unless -e $file;
 
     my $contents;
     open my $fd, '<', $file or do {
         $log->warn ("open: '$file': $!");
-        return $self->render(
+        return $self->render (
             'template' => 'internal_server_error',
             'action'   => 'opening',
             'status'   => 500,
@@ -207,8 +200,8 @@ sub get_article {
     { local $/; $contents = <$fd>; }
     close $fd;
 
-    $self->render(
-        'content'   => markup( $contents ),
+    $self->render (
+        'content'   => markup ($contents),
         'title'  => $title,
         'layout' => 'default',
         'show_edit' => 1,
@@ -225,59 +218,58 @@ and process this form.
 
 sub edit_article {
     my $self = shift;
-    my $article_title   = $self->param('title') || '';
-    my $article_content = $self->param('article');
+    my $article_title   = $self->param ('title') || '';
+    my $article_content = $self->param ('article');
     $article_title = basename $article_title;
 
     my $file = "$DATADIR/$article_title";
     $log->debug ("file is '$file'");
 
-    if ( $self->req->method eq 'POST' ) {
+    if ($self->req->method eq 'POST') {
         my @errors = ();
 
-        unless ( $article_content ) {
-            return $self->render(
+        unless ($article_content) {
+            return $self->render (
                 'errors'            => [ __ 'Page content can not be empty' ],
                 'template'          => 'edit_article',
-                'title'             => b( __ 'Edit page' )->decode( 'UTF-8' ),
+                'title'             => b (__ 'Edit page')->decode ('UTF-8'),
                 'article_content'   => $article_content,
-                'article_title'     => b( $article_title )->decode( 'UTF-8' ),
+                'article_title'     => b ($article_title)->decode ('UTF-8'),
             );
         }
 
         open my $fd, '>', $file or do {
             $log->warn ("open: '$file': $!");
-            push ( @errors, __ 'Can not save: open' );
+            push (@errors, __ 'Can not save: open');
             goto END;
         };
 
         $article_content = sprintf "%s\n", join "\n", split /\x0d\x0a/, $article_content;
         print $fd $article_content or do {
             $log->warn ("write: '$file': $!");
-            push ( @errors, __ 'Can not save: write' );
+            push (@errors, __ 'Can not save: write');
             goto END;
         };
         close $fd;
 
-        $self->flash( 'message' => __ 'Changes were saved' );
-        $self->redirect_to( "/$article_title" );
+        $self->flash ('message' => __ 'Changes were saved');
+        $self->redirect_to ("/$article_title");
 
         END:
-        return $self->render(
+        return $self->render (
             'errors'            => [ @errors ],
             'template'          => 'edit_article',
-            'title'             => b( __ 'Errors occured' )->decode( 'UTF-8' ),
+            'title'             => b (__ 'Errors occured')->decode ('UTF-8'),
             'article_content'   => $article_content,
-            'article_title'     => b( $article_title )->decode( 'UTF-8' ),
+            'article_title'     => b ($article_title)->decode ('UTF-8'),
         );
-
     }
 
     my $contents = '';
-    if ( -e $file ) { # existing record
+    if (-e $file) {
         open my $fd, '<', $file or do {
             $log->warn ("open: '$file': $!");
-            return $self->render(
+            return $self->render (
                 'template' => 'internal_server_error',
                 'action'   => 'opening',
                 'status'   => 500,
@@ -287,39 +279,39 @@ sub edit_article {
         close $fd;
     }
 
-    return $self->render(
+    return $self->render (
         'template'          => 'edit_article',
-        'title'             => b( __ 'Edit page' )->decode( 'UTF-8' ),
-        'article_content'   => b( $contents )->decode( 'UTF-8' ),
-        'article_title'     => b( $article_title )->decode( 'UTF-8' ),
+        'title'             => b (__ 'Edit page')->decode ('UTF-8'),
+        'article_content'   => b ($contents)->decode ('UTF-8'),
+        'article_title'     => b ($article_title)->decode ('UTF-8'),
     );
 }
 
 
 =head2 delete_article
 
-Delete article specified by title
+Delete article specified by title.
 
 =cut
 
 sub delete_article {
     my $self = shift;
-    my $title = basename $self->param('title') || return;
+    my $title = basename $self->param ('title') || return;
 
     my $file = "$DATADIR/$title";
     $log->debug ("file is '$file'");
 
-    return $self->render(
+    return $self->render (
         'template' => 'not_found',
     ) unless -e $file;
 
     if (unlink $file) {
         $log->debug ("'$file' successfully unlinked");
-        $self->flash( 'message' => __ 'Page was deleted' );
-        return $self->redirect_to( '/' );
+        $self->flash ('message' => __ 'Page was deleted');
+        return $self->redirect_to ('/');
     } else {
         $log->warn ("unlink: '$file': $!");
-        return $self->render(
+        return $self->render (
             'template' => 'internal_server_error',
             'action'   => 'deleting',
             'status'   => 500,
@@ -329,7 +321,7 @@ sub delete_article {
 
 =head2 search
 
-Search pages by title and content
+Search pages by title and content.
 
 =cut
 
@@ -337,7 +329,7 @@ sub search {
     my $self = shift;
 
     my $title = __ 'Search';
-    my $query = $self->param('query') || '';
+    my $query = $self->param ('query') || '';
     my $rows  = [];
 
     $log->debug ("search query is '$query'");
@@ -346,11 +338,11 @@ sub search {
     };
     if ($@ and 'Eval-group not allowed at runtime' eq substr $@, 0, 33) {
         $log->warn ("eval: $@");
-        $self->flash( 'message' => __ 'Invalid regular expression' );
-        return $self->redirect_to( '/search' );
+        $self->flash ('message' => __ 'Invalid regular expression');
+        return $self->redirect_to ('/search');
     }
 
-    if ( $query ) {
+    if ($query) {
         my @files = map { basename $_ } glob "$DATADIR/*";
         $log->debug (sprintf 'performing search on %d files', scalar @files);
         foreach my $f (@files) {
@@ -367,8 +359,8 @@ sub search {
 
         if (1 == @$rows) {
             $log->debug ('unique match found');
-            $self->flash( 'message' => __ 'Exact matching found' );   ## this can't currently be seen, as the template for /$title doesn't show it
-            return $self->redirect_to( "/$rows->[0]" );
+            $self->flash ('message' => __ 'Exact matching found');   ## this can't currently be seen, as the template for /$title doesn't show it     TODO is this still true
+            return $self->redirect_to ("/$rows->[0]");
         }
 
         $title = __nx
@@ -377,21 +369,21 @@ sub search {
             scalar @$rows,
             'count' => scalar @$rows;
 
-        foreach my $row ( @$rows ) {
-            $row = b( $row )->decode('UTF-8');
+        foreach my $row (@$rows) {
+            $row = b ($row)->decode ('UTF-8');
         }
     }
 
-    return $self->render(
+    return $self->render (
         'template'         => 'search',
         'query'            => $query,
         'rows'             => $rows,
-        'title'            => b( $title )->decode('UTF-8'),
+        'title'            => b ($title)->decode ('UTF-8'),
     );
 }
 
 
-=head2  set_language
+=head2 set_language
 
 Set preferred language.
 Called as set_language/I<ln> or as set_language?language=I<ln>, where I<ln> is language code.
@@ -401,8 +393,8 @@ In version 0.0.3 available 2 languages: English and Russian.
 
 sub set_language {
     my $self = shift;
-    $self->session( 'language' => $self->param( 'language' ) );
-    $self->redirect_to( $self->req->headers->referrer || '/' );
+    $self->session ('language' => $self->param ('language'));
+    $self->redirect_to ($self->req->headers->referrer || '/');
 }
 
 __DATA__
@@ -415,7 +407,7 @@ __DATA__
 @@ sitemap.html.ep
 % layout 'default', 'title' => __ 'Sitemap';
 <ul>
-% for my $row ( @$rows ) {
+% for my $row (@$rows) {
 %   my $link = $row;
     <li><a href="<%= url_for "/$link" %>"><%= $row %></a></li>
 % }
@@ -434,7 +426,7 @@ __DATA__
 <input type="submit" value="<%= __ 'Find' %>">
 </form>
 <ol>
-% for my $row ( @$rows ) {
+% for my $row (@$rows) {
 %   my $link = $row;
     <li><a href="<%= url_for "/$link" %>"><%= $row %></a></li>
 % }
@@ -471,11 +463,11 @@ __DATA__
 <script type="text/javascript" src="<%= url_for '/jquery.caret.1.02.min.js' %>"></script>
 <script type="text/javascript">
 function wrap(prefix, suffix) {
-    with ( $('#article') ) {
+    with ($('#article')) {
         var inner = caret().text;
         var start = caret().start;
         var end   = caret().end;
-        val( caret().replace( prefix + inner + suffix ) );
+        val (caret().replace (prefix + inner + suffix));
         caret({ start: start+prefix.length, end:end+prefix.length });
     }
     return false;
@@ -535,10 +527,10 @@ button:hover{border-color:#69c}
 #btn_ol { background-position: -120px 50% }
 </style>
 
-% if ( my $errors = stash 'errors' ) {
+% if (my $errors = stash 'errors') {
     <ul id="errors">
-%   for my $error ( @$errors ) {
-        <li><%= b( $error )->decode('UTF-8')->to_string %></li>
+%   for my $error (@$errors) {
+        <li><%= b ($error)->decode ('UTF-8')->to_string %></li>
 %   }
     </ul>
 % }
@@ -575,10 +567,7 @@ button:hover{border-color:#69c}
     <head>
         <title><%= $title || __ 'ERROR' %></title>
         <style type="text/css">body{background:#fec;color:#000}h1{color:#900}</style>
-%# Maybe You can replace next line
-%# with <link rel="stylesheet" type="text/css" link="style.css">
-%# when you can inflate files. I can't :-(
-    <style type="text/css"><%= include 'style.css' %></style>
+        <link rel="stylesheet" type="text/css" href="/style.css">
     </head>
     <body>
 %= include 'menu';
@@ -593,15 +582,12 @@ button:hover{border-color:#69c}
 <html>
     <head><title><%= $title || __ 'Welcome'%></title>
     <link rel="shortcut icon" href="<%= url_for '/favicon.ico' %>">
-%# Maybe You can replace next line
-%# with <link rel="stylesheet" type="text/css" link="style.css">
-%# when you can inflate files. I can't :-(
-    <style type="text/css"><%= include 'style.css' %></style>
+    <link rel="stylesheet" type="text/css" href="/style.css">
     </head>
     <body>
 %= include 'menu';
-% if ( my $message = flash 'message' ) {
-        <div id="message"><%= b( $message )->decode('UTF-8')->to_string %></div>
+% if (my $message = flash 'message') {
+        <div id="message"><%= b ($message)->decode ('UTF-8')->to_string %></div>
 % }
 
     <h1><%= $title %></h1>
@@ -610,7 +596,7 @@ button:hover{border-color:#69c}
 </html>
 
 @@ jquery.html.ep
-<%= javascript 'http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js' %>
+<%= javascript '/jquery.min.js' %>
 <%= javascript begin %>
     if (typeof jQuery == 'undefined') {
       var e = document.createElement('script');
@@ -627,134 +613,3 @@ button:hover{border-color:#69c}
     <li><form
     action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option></select></form></li><li><form
     action="<%= url_for '/search' %>"><input type="text" name="query"></form></li></ul>
-
-@@ style.css.html.ep
-body {
-    background: #fff;
-    color:      #000;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: sans-serif;
-}
-
-@media screen {
-    body {
-        margin:     0;
-        padding:    1em;
-    }
-
-    h1 {
-        color:      #223;
-        font-size:  140%;
-    }
-
-    h2 {
-        color:      #335;
-        font-size:  120%;
-    }
-
-    h3 {
-        color:      #446;
-        font-size:  100%;
-    }
-
-    #message {
-        border:     1px solid #fc0;
-        background: #fec;
-        padding:    1em;
-    }
-
-    #logged {
-        float:      right;
-        display:    inline;
-        margin:     0;
-    }
-
-    #menu {
-        list-style: none;
-        margin:     -1.25em -1.25em 1em;
-        padding:    0;
-        height:     2em;
-        font-size:  80%;
-        background-color: #e0e7ee;
-    }
-
-    #menu li {
-        display:    inline;
-        padding:    0;
-    }
-
-    #menu a {
-        padding:    0.3em 1em 0;
-        height:     1.7em;
-        display:    block;
-        float:      left;
-    }
-
-    #menu a:hover {
-        background-color: #8ab;
-        color:      #000;
-        text-decoration:        none;
-    }
-
-    #menu form {
-        display:    inline;
-        float:      right;
-    }
-
-    #menu input {
-        background: #fff url(<%= url_for '/bg-search.png' %>) no-repeat 100% 50%;
-        color: #333;
-        font-family: 'DejaVu Sans Mono','Liberation Mono',monospaced;
-    }
-
-}
-
-#logged li {
-    display:    inline;
-    background: #eee;
-    border:     1px solid #ccc;
-    padding:    0.1em 0.5em;
-}
-
-#errors {
-    background: #fdc;
-    border:     1px solid #c00;
-}
-
-dd textarea {
-    width:  100%;
-    height: 7em;
-}
-
-#preview_area {
-    border: 1px solid #900;
-    margin-top: 1em;
-    padding: 1em;
-    background: #eee;
-    display: none;
-}
-
-#preview_link {
-    color:      #656;
-    text-decoration: none;
-    border-bottom: 1px dashed #878;
-}
-
-#delete_link {
-    color:      #900;
-    float:      right;
-}
-
-@media print {
-    body {
-        font-family: serif;
-    }
-
-    #logged, #message, #menu {
-        display: none;
-    }
-}
-
-
