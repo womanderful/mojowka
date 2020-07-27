@@ -339,25 +339,36 @@ sub search {
     my $query = $self->param('query') || '';
     my $rows  = [];
 
+    $log->debug ("search query is '$query'");
+    eval {
+        'test' =~ qr/$query/;
+    };
+    if ($@ and 'Eval-group not allowed at runtime' eq substr $@, 0, 33) {
+        $log->warn ("eval: $@");
+        $self->flash( 'message' => __ 'Invalid regular expression' );
+        return $self->redirect_to( '/search' );
+    }
+
     if ( $query ) {
-        my $row = $dbh->selectcol_arrayref(
-            q{SELECT title FROM page WHERE LOWER(title)=LOWER(?)},
-            {},
-            $query,
-        );
-        if ( @$row ) {
-            $self->flash( 'message' => __ 'Exact matching found' );
-            $query = b( shift @$row )->decode('UTF-8')->to_string;
-            $query =~ tr/ /_/;
-            $self->redirect_to( "/$query" );
-            return;
+        my @files = map { basename $_ } glob "$DATADIR/*";
+        $log->debug (sprintf 'performing search on %d files', scalar @files);
+        foreach my $f (@files) {
+            open my $fd, '<', "$DATADIR/$f" or do {
+                $log->warn ("open: '$DATADIR/$f': $!");
+                next;
+            };
+            my $contents; { local $/; $contents = <$fd>; }
+            close $fd;
+            if ($f =~ qr/$query/i or $contents =~ qr/$query/i) {
+                push @$rows, $f;
+            }
         }
 
-        $rows = $dbh->selectcol_arrayref(
-            q{SELECT title FROM page WHERE LOWER(title) LIKE LOWER(?) OR LOWER(text) LIKE LOWER(?) ORDER BY LOWER(title)},
-            {},
-            "%$query%", "%$query%",
-        );
+        if (1 == @$rows) {
+            $log->debug ('unique match found');
+            $self->flash( 'message' => __ 'Exact matching found' );   ## this can't currently be seen, as the template for /$title doesn't show it
+            return $self->redirect_to( "/$rows->[0]" );
+        }
 
         $title = __nx
             'Found {count} page',
@@ -368,7 +379,6 @@ sub search {
         foreach my $row ( @$rows ) {
             $row = b( $row )->decode('UTF-8');
         }
-
     }
 
     return $self->render(
@@ -427,7 +437,6 @@ __DATA__
 <ol>
 % for my $row ( @$rows ) {
 %   my $link = $row;
-%   $link =~ tr/ /_/;
 %   $row  ||= __ 'Main page';
     <li><a href="<%= url_for "/$link" %>"><%= $row %></a></li>
 % }
