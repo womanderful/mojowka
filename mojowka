@@ -38,6 +38,15 @@ our $VERSION=0.05;
 my $log = Mojo::Log->new;
 my $DATADIR = $ENV{'MOJOWKA_DATADIR'} || '/var/lib/mojowka';
 our $txt = Text::Textile->new; $txt->charset('utf-8');
+my $index_text = <<'EOF';
+Welcome to mojowka-didi
+
+Mojowka-didi is a small and simple wiki implementation based on mojowka (which in turn is based on Mojolicious::Lite).
+
+There is no setup needed. No database or user authentication.
+
+It's intended for personal note-taking, "to do" lists, and any other uses you can think of. You can write articles in plain text or markdown.
+EOF
 
 # i18n
 ## https://github.com/mojolicious/mojo/commit/503dec92a504a68165d62ad4cc22f5c05f5e6a9a#diff-58aa583130bcb90490b462f556b92f86
@@ -75,7 +84,7 @@ post '/preview' => sub {
 get '/sitemap' => sub {
     my $self = shift;
 
-    my $rows = [ map { basename $_ } glob "$DATADIR/*" ];
+    my $rows = [ grep { 'index' ne $_ } map { basename $_ } glob "$DATADIR/*" ];
 
     foreach my $row ( @$rows ) {
         $row = b( $row )->decode('UTF-8')->to_string;
@@ -131,6 +140,26 @@ sub markup {
 }
 
 
+=head2 create_index
+
+Create the landing page
+
+=cut
+
+sub create_index {
+    open my $fd, '>', "$DATADIR/index" or do {
+        $log->warn ("open: '$DATADIR/index': $!");
+        return;
+    };
+    print $fd $index_text or do {
+        $log->warn ("write: '$DATADIR/index': $!");
+        return;
+    };
+    close $fd;
+    return 1;
+}
+
+
 =head2 get_article
 
 Get article by title
@@ -140,6 +169,23 @@ Get article by title
 sub get_article {
     my $self  = shift;
     my $title = $self->param('title') || '';
+
+    if (!$title) {
+        $log->debug ('no title');
+        if (!-e "$DATADIR/index") {
+            $log->debug ('index page does not exist');
+            if (!create_index) {
+                return $self->render(
+                    'template' => 'internal_server_error',
+                    'action'   => 'opening or writing',
+                    'status'   => 500,
+                );
+            }
+            $log->debug ('index page created');
+        }
+        return $self->redirect_to( "/index" );
+    }
+
     $title = basename $title;
 
     my $file = "$DATADIR/$title";
@@ -372,7 +418,6 @@ __DATA__
 <ul>
 % for my $row ( @$rows ) {
 %   my $link = $row;
-%   $row  ||= __ 'Main page';
     <li><a href="<%= url_for "/$link" %>"><%= $row %></a></li>
 % }
 </ul>
@@ -392,7 +437,6 @@ __DATA__
 <ol>
 % for my $row ( @$rows ) {
 %   my $link = $row;
-%   $row  ||= __ 'Main page';
     <li><a href="<%= url_for "/$link" %>"><%= $row %></a></li>
 % }
 </ol>
@@ -578,7 +622,7 @@ button:hover{border-color:#69c}
 <% end %>
 
 @@ menu.html.ep
-<ul id="menu"><li><a href="<%= url_for '/' %>"><%= __ 'Main page' %></a></li><li><a
+<ul id="menu"><li><a href="<%= url_for '/index' %>"><%= __ 'Main page' %></a></li><li><a
     href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
     <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>">Edit</a></li><% } %>
     <li><form
