@@ -97,6 +97,7 @@ get '/sitemap' => sub {
 get '/search/:query'                   => \&search;
 get '/search'                          => \&search;
 any '/edit/#title'                     => \&edit_article;
+any '/edit'                            => \&edit_article;
 any '/delete/#title'                   => \&delete_article;
 get '/#title'                          => \&get_article;
 get '/'                                => \&get_article;
@@ -611,5 +612,7 @@ button:hover{border-color:#69c}
     href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
     <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>">Edit</a></li><% } %>
     <li><form
-    action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option></select></form></li><li><form
-    action="<%= url_for '/search' %>"><input type="text" name="query"></form></li></ul>
+    action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option></select></form></li>
+    <li><form action="<%= url_for '/search' %>"><input id="search" type="text" name="query"></form></li>
+    <li><form action="<%= url_for '/edit' %>">  <input id="edit"   type="text" name="title"></form></li>
+    </ul>
