@@ -250,7 +250,8 @@ sub edit_article {
             push ( @errors, __ 'Can not save: open' );
             goto END;
         };
-        $article_content .= "\x0d\x0a" if "\x0a" ne substr $article_content, -1;
+
+        $article_content = sprintf "%s\n", join "\n", split /\x0d\x0a/, $article_content;
         print $fd $article_content or do {
             $log->warn ("write: '$file': $!");
             push ( @errors, __ 'Can not save: write' );
