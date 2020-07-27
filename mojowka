@@ -104,55 +104,11 @@ get '/sitemap' => sub {
     );
 };
 
-get '/tags' => sub {
-    my $self = shift;
-
-    my $rows = $dbh->selectcol_arrayref(
-        q{SELECT title FROM tag ORDER BY LOWER(title)},
-    );
-
-    return undef unless $rows;
-
-    foreach my $row ( @$rows ) {
-        $row = b( $row )->decode('UTF-8')->to_string;
-    }
-
-    return $self->render(
-        'rows'     => $rows,
-    );
-};
-
-get '/tags/:tag' => sub {
-    my $self = shift;
-    my $tag  = $self->param('tag');
-
-    my $rows = $dbh->selectall_arrayref(
-        q{
-            SELECT filename,image.text
-            FROM image
-            LEFT JOIN image_tag
-                ON image_tag.image=image.id
-            LEFT JOIN tag
-                ON image_tag.tag=tag.id
-            WHERE LOWER(tag.title)=LOWER(?)
-        },
-        { Slice => {} },
-        $tag, 
-    );
-
-    return $self->render(
-        'tag'       => $tag,
-        'rows'      => $rows,
-    );
-};
-
-get '/search/:query' => \&search;
-get '/search'        => \&search;
-
+get '/search/:query'                   => \&search;
+get '/search'                          => \&search;
 any '/edit/:id'   => [ id => qr/\d+/ ] => \&edit_article;
 any '/edit/:id'   => [ id => 'new'   ] => \&edit_article;
-any '/create/*title'                 => \&edit_article;
-
+any '/create/*title'                   => \&edit_article;
 any '/delete/:id' => [ id => qr/\d+/ ] => \&delete_article;
 
 # Other requests
@@ -463,26 +419,6 @@ __DATA__
 <ul>
 <li><a href="<%= url_for '/search'  %>"><%= __ 'Search' %></a></li>
 <li><a href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
-</ul>
-
-
-@@ tags.html.ep
-% layout 'default', 'title' => __ 'Tags';
-<ul>
-% for my $row ( @$rows ) {
-%   my $link = $row;
-%   $link =~ tr/ /_/;
-    <li><a href="<%= url_for "/tags/$link" %>"><%= $row %></a></li>
-% }
-</ul>
-
-
-@@ tagstag.html.ep
-% layout 'default', 'title' => __x '{tag} tagged images', 'tag' => $tag;
-<ul class="gallery">
-% for my $row ( @$rows ) {
-    <li><a href="<%= url_for( 'nati-base' . '/' . $row->{'filename'} ) %>"><img src="<%= url_for ( 'nati-base' . '/tn/' . $row->{'filename'} ) %>" alt="<%= $row->{'text'}%>"></a></li>
-% }
 </ul>
 
 
