@@ -193,7 +193,6 @@ sub get_article {
 
     return $self->render(
         'template' => 'not_found',
-        'status'   => 404,
     ) unless -e $file;
 
     my $contents;
@@ -311,7 +310,6 @@ sub delete_article {
 
     return $self->render(
         'template' => 'not_found',
-        'status'   => 404,
     ) unless -e $file;
 
     if (unlink $file) {
