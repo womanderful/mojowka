@@ -162,9 +162,10 @@ sub get_article {
     close $fd;
 
     $self->render(
-        'text'   => markup( $contents ),
+        'content'   => markup( $contents ),
         'title'  => $title,
         'layout' => 'default',
+        'show_edit' => 1,
     );
 }
 
@@ -360,7 +361,7 @@ __DATA__
 
 @@ title.html.ep
 % layout 'default';
-%= $text
+%== $content
 
 
 @@ sitemap.html.ep
@@ -384,7 +385,6 @@ __DATA__
 <form action="<%= url_for '/search' %>">
 <input type="text" name="query" value="<%= $query %>">
 <input type="submit" value="<%= __ 'Find' %>">
-</dl>
 </form>
 <ol>
 % for my $row ( @$rows ) {
@@ -538,6 +538,10 @@ button:hover{border-color:#69c}
     <head>
         <title><%= $title || __ 'ERROR' %></title>
         <style type="text/css">body{background:#fec;color:#000}h1{color:#900}</style>
+%# Maybe You can replace next line
+%# with <link rel="stylesheet" type="text/css" link="style.css">
+%# when you can inflate files. I can't :-(
+    <style type="text/css"><%= include 'style.css' %></style>
     </head>
     <body>
 %= include 'menu';
@@ -581,7 +585,9 @@ button:hover{border-color:#69c}
 
 @@ menu.html.ep
 <ul id="menu"><li><a href="<%= url_for '/' %>"><%= __ 'Main page' %></a></li><li><a
-    href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li><li><form
+    href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
+    <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>">Edit</a></li><% } %>
+    <li><form
     action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option></select></form></li><li><form
     action="<%= url_for '/search' %>"><input type="text" name="query"></form></li></ul>
 
