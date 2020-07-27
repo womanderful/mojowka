@@ -94,7 +94,7 @@ get '/search'                          => \&search;
 any '/edit/:id'   => [ id => qr/\d+/ ] => \&edit_article;
 any '/edit/:id'   => [ id => 'new'   ] => \&edit_article;
 any '/create/*title'                   => \&edit_article;
-any '/delete/:id' => [ id => qr/\d+/ ] => \&delete_article;
+any '/delete/*title'                   => \&delete_article;
 
 # Other requests
 under sub { 1 };
@@ -157,7 +157,7 @@ sub get_article {
         'status'   => 404,
     ) unless -e $file;
 
-	my $contents;
+    my $contents;
     open my $fd, '<', $file or do {
         $log->warn ("open: '$file': $!");
         return $self->render(
@@ -297,23 +297,32 @@ sub edit_article {
 
 =head2 delete_article
 
-Delete article specified by ID
+Delete article specified by title
 
 =cut
 
 sub delete_article {
     my $self = shift;
-    my $id   = $self->param('id') || return; # natural number only
+    my $title = basename $self->param('title') || return;
 
-    my $rows_affected = $dbh->do(
-        q{DELETE FROM page WHERE id=?},
-        {},
-        $id,
-    );
+    my $file = "$DATADIR/$title";
+    $log->debug ("file is '$file'");
 
-    if ( $rows_affected == 1 ) { # deleted without errors
+    return $self->render(
+        'template' => 'not_found',
+        'status'   => 404,
+    ) unless -e $file;
+
+    if (unlink $file) {
+        $log->debug ("'$file' successfully unlinked");
         $self->flash( 'message' => __ 'Page was deleted' );
-        $self->redirect_to( '/' );
+        return $self->redirect_to( '/' );
+    } else {
+        $log->warn ("unlink: '$file': $!");
+        return $self->render(
+            'template' => 'eunlink',
+            'status'   => 500,
+        );
     }
 }
 
@@ -446,6 +455,16 @@ __DATA__
 </ul>
 
 
+@@ eunlink.html.ep
+% layout 'error';
+% stash 'title' => __ 'ERROR 500';
+<h1><%= __ 'Error' %></h1><p><%= __ 'Error deleting the document you requested.' %></p>
+<ul>
+% my $article_title = param 'title';
+<li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
+</ul>
+
+
 @@ edit_article.html.ep
 % layout 'default';
 % use Mojo::ByteStream 'b';
@@ -550,7 +569,7 @@ button:hover{border-color:#69c}
     <a href="<%= url_for "/$old_title" %>"><%= __ 'Cancel' %></a>
 % }
 % if ( $id ) {
-    <a href="<%= url_for "/delete/$id" %>" id="delete_link"
+    <a href="<%= url_for "/delete/$article_title" %>" id="delete_link"
     onclick="return confirm('<%= __ 'Do you really want to delete this page?' %>')"><%= __ 'Delete page' %></a>
 % }
 </form>
