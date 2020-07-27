@@ -38,6 +38,7 @@ our $VERSION=0.05;
 
 my $log = Mojo::Log->new;
 my $dbfile = $ENV{'MOJOWKA_DATAFILE'} || 'data.sqlite';
+my $DATADIR = $ENV{'MOJOWKA_DATADIR'} || '/var/lib/mojowka';
 our $dbh = DBI->connect("dbi:SQLite:dbname=$dbfile", undef, undef, {sqlite_unicode => 1});
 our $txt = Text::Textile->new; $txt->charset('utf-8');
 
@@ -77,11 +78,7 @@ post '/preview' => sub {
 get '/sitemap' => sub {
     my $self = shift;
 
-    my $rows = $dbh->selectcol_arrayref(
-        q{SELECT title FROM page ORDER BY LOWER(title)},
-    );
-
-    return undef unless $rows;
+    my $rows = [ map { basename $_ } glob "$DATADIR/*" ];
 
     foreach my $row ( @$rows ) {
         $row = b( $row )->decode('UTF-8')->to_string;
@@ -395,7 +392,6 @@ __DATA__
 <ul>
 % for my $row ( @$rows ) {
 %   my $link = $row;
-%   $link =~ tr/ /_/;
 %   $row  ||= __ 'Main page';
     <li><a href="<%= url_for "/$link" %>"><%= $row %></a></li>
 % }
