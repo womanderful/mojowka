@@ -147,27 +147,32 @@ Get article by title
 sub get_article {
     my $self  = shift;
     my $title = $self->param('title') || '';
-    $title =~  s/\.html$//;
-    $title =~ tr/_/ /;
+    $title = basename $title;
 
-    my $row = $dbh->selectrow_hashref(
-        q{SELECT * FROM page WHERE LOWER(title)=LOWER(?)},
-        {},
-        $title,
-    );
+    my $file = "$DATADIR/$title";
+    $log->debug ("file is '$file'");
 
     return $self->render(
         'template' => 'not_found',
         'status'   => 404,
-    ) unless $row;
+    ) unless -e $file;
+
+	my $contents;
+    open my $fd, '<', $file or do {
+        $log->warn ("open: '$file': $!");
+        return $self->render(
+            'template' => 'eopen',
+            'status'   => 500,
+        );
+    };
+    { local $/; $contents = <$fd>; }
+    close $fd;
 
     $self->render(
-        'text'   => markup( $row->{'text'} ),
+        'text'   => markup( $contents ),
         'title'  => $title,
         'layout' => 'default',
-        'id'     => $row->{'id'},
     );
-
 }
 
 
@@ -428,6 +433,16 @@ __DATA__
 % my $article_title = param 'title';
 <li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
 <li><a href="<%= url_for "/create/$article_title" %>"><%== __x 'Create page &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
+</ul>
+
+
+@@ eopen.html.ep
+% layout 'error';
+% stash 'title' => __ 'ERROR 500';
+<h1><%= __ 'Error' %></h1><p><%= __ 'Error opening the document you requested.' %></p>
+<ul>
+% my $article_title = param 'title';
+<li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
 </ul>
 
 
