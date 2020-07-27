@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-28 14:20+0200\n"
+"POT-Creation-Date: 2020-07-29 18:29+0200\n"
 "PO-Revision-Date: 2013-05-09 02:00+0600\n"
 "Last-Translator: Alexander Sapozhnikov <shoorick@cpan.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,51 +18,51 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: ../mojowka.tmp:226
+#: ../mojowka-didi.tmp:219
 msgid "Page content can not be empty"
 msgstr "Содержимое страницы не может быть пустым"
 
-#: ../mojowka.tmp:228 ../mojowka.tmp:277
+#: ../mojowka-didi.tmp:221 ../mojowka-didi.tmp:270
 #, fuzzy
 msgid "Edit page"
 msgstr "Изменить эту страницу"
 
-#: ../mojowka.tmp:236
+#: ../mojowka-didi.tmp:229
 #, fuzzy
 msgid "Can not save: error opening article"
 msgstr "Не могу сохранить"
 
-#: ../mojowka.tmp:243
+#: ../mojowka-didi.tmp:236
 #, fuzzy
 msgid "Can not save: error writing article"
 msgstr "Не могу сохранить"
 
-#: ../mojowka.tmp:248
+#: ../mojowka-didi.tmp:241
 #, fuzzy
 msgid "Changes were saved"
 msgstr "Изменения сохранены"
 
-#: ../mojowka.tmp:255
+#: ../mojowka-didi.tmp:248
 msgid "Errors occured"
 msgstr "Произошли ошибки"
 
-#: ../mojowka.tmp:303
+#: ../mojowka-didi.tmp:296
 msgid "Page was deleted"
 msgstr "Страница удалена"
 
-#: ../mojowka.tmp:324 ../mojowka.tmp:410
+#: ../mojowka-didi.tmp:317 ../mojowka-didi.tmp:403
 msgid "Search"
 msgstr "Поиск"
 
-#: ../mojowka.tmp:334
+#: ../mojowka-didi.tmp:327
 msgid "Invalid regular expression"
 msgstr ""
 
-#: ../mojowka.tmp:355
+#: ../mojowka-didi.tmp:348
 msgid "Exact matching found"
 msgstr "Найдено точное соответствие"
 
-#: ../mojowka.tmp:360
+#: ../mojowka-didi.tmp:353
 #, perl-brace-format
 msgid "Found {count} page"
 msgid_plural "Found {count} pages"
@@ -70,49 +70,54 @@ msgstr[0] "Найдена {count} страница"
 msgstr[1] "Найдено {count} страницы"
 msgstr[2] "Найдено {count} страниц"
 
-#: ../mojowka.tmp:401 ../mojowka.tmp:411
+#: ../mojowka-didi.tmp:394 ../mojowka-didi.tmp:404
 msgid "Sitemap"
 msgstr "Карта сайта"
 
-#: ../mojowka.tmp:537
+#: ../mojowka-didi.tmp:530
 msgid "Bold (Ctrl+B)"
 msgstr "Жирный (Ctrl+B)"
 
-#: ../mojowka.tmp:538
+#: ../mojowka-didi.tmp:531
 msgid "Italic (Ctrl+I)"
 msgstr "Курсив (Ctrl+I)"
 
-#: ../mojowka.tmp:539
+#: ../mojowka-didi.tmp:532
 msgid "Header 1"
 msgstr "Заголовок 1"
 
-#: ../mojowka.tmp:540
+#: ../mojowka-didi.tmp:533
 msgid "Header 2"
 msgstr "Заголовок 2"
 
-#: ../mojowka.tmp:541
+#: ../mojowka-didi.tmp:534
 msgid "Header 3"
 msgstr "Заголовок 3"
 
-#: ../mojowka.tmp:542
+#: ../mojowka-didi.tmp:535
 msgid "Unordered list item"
 msgstr "Элемент ненумерованного списка"
 
-#: ../mojowka.tmp:543
+#: ../mojowka-didi.tmp:536
 msgid "Ordered list item"
 msgstr "Элемент нумерованного списка"
 
-#: ../mojowka.tmp:550
-msgid "Preview"
-msgstr "Просмотр"
+#: ../mojowka-didi.tmp:542
+msgid "Save"
+msgstr "Сохранить"
 
-#: ../mojowka.tmp:552
-msgid "Delete page"
-msgstr "Удалить страницу"
+#: ../mojowka-didi.tmp:569
+msgid "Welcome"
+msgstr "Добро пожаловать"
 
-#: ../mojowka.tmp:561
-msgid "ERROR"
-msgstr "ОШИБКА"
+#~ msgid "Preview"
+#~ msgstr "Просмотр"
+
+#~ msgid "Delete page"
+#~ msgstr "Удалить страницу"
+
+#~ msgid "ERROR"
+#~ msgstr "ОШИБКА"
 
 #~ msgid "Thanks for logging in"
 #~ msgstr "Спасибо, что зашли"
@@ -186,9 +191,6 @@ msgstr "ОШИБКА"
 # manually added
 #~ msgid "Can not preview"
 #~ msgstr "Не могу показать"
-
-#~ msgid "Save"
-#~ msgstr "Сохранить"
 
 #~ msgid "Strong password"
 #~ msgstr "Хороший пароль"
@@ -280,9 +282,6 @@ msgstr "ОШИБКА"
 
 #~ msgid "Do you really want to delete this page?"
 #~ msgstr "Вы действительно хотите удалить страницу?"
-
-#~ msgid "Welcome"
-#~ msgstr "Добро пожаловать"
 
 #~ msgid "Logged as"
 #~ msgstr "Вошёл как"

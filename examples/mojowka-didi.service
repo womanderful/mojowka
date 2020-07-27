@@ -1,0 +1,14 @@
+[Unit]
+Description=Mojowka-didi wiki
+After=network-online.target
+
+[Service]
+User=mojowka-didi
+Group=mojowka-didi
+Type=simple
+Environment=MOJOWKA_DIDI_DATADIR=/path/to/var/lib/mojowka-didi
+ExecStart=/usr/bin/perl /path/to/git/mojowka-didi/mojowka-didi
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

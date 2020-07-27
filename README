@@ -1,45 +1,43 @@
-                  ##                    ##
-                                        ##
- ##  ##    ####   ##   ####   ## ## ##  ## ##   #####
-## ## ##  ##  ##  ##  ##  ##  ## ## ##  ###    ##  ##
-## ## ##  ##  ##  ##  ##  ##  ## ## ##  ## ##  ##  ##
-## ## ##   ####   ##   ####    ##  ##   ##  ##  ### ##
+                  ##                    ##                         ##  ##      ##  ##
+                                        ##                         ##          ##
+ ##  ##    ####   ##   ####   ## ## ##  ## ##   #####           #####  ##   #####  ##
+## ## ##  ##  ##  ##  ##  ##  ## ## ##  ###    ##  ##   #####  ##  ##  ##  ##  ##  ##
+## ## ##  ##  ##  ##  ##  ##  ## ## ##  ## ##  ##  ##   #####  ##  ##  ##  ##  ##  ##
+## ## ##   ####   ##   ####    ##  ##   ##  ##  ### ##          ### ##  ##  ### ##  ##
                  ##
                 ##
 
-mojowka - is a lightweight wiki
-based on top of Mojolicious::Lite
+mojowka-didi - a mojowka spin-off with reduced
+functionality—down to the feature set of didiwiki
 
 Usage:
-    ./mojowka COMMAND [OPTIONS]
+    ./mojowka-didi COMMAND [OPTIONS]
     Example:
-    ./mojowka daemon --reload
+    ./mojowka-didi daemon --reload
         # spawn server
-    ./mojowka help
+    ./mojowka-didi help
         # get list of available commands
 
 When COMMAND and OPTIONS are omitted then server will be spawned
-(./mojowka is equivalent to ./mojowka daemon).
+(./mojowka-didi is equivalent to ./mojowka-didi daemon).
 
-Before first run you must create database:
-    sqlite3 data.sqlite < init.sql
+Installation:
+    Copy examples/mojowka-didi.service to /etc/systemd/system and edit MOJOWKA_DIDI_DATADIR
+    Create user and group mojowka-didi
+    Copy examples/index to $MOJOWKA_DIDI_DATADIR
+    Start mojowka-didi
 
-Registered users can change content of pages and upload images.
-There's one user: admin with same password.
-
-Go  to http://127.0.0.1:3000/desired_page for creating new page
-and to http://127.0.0.1:3000/images/desired_image for uploading.
+Now go to http://127.0.0.1:3000/ and start writing your notes!
 
 Prerequisites:
     Mojolicious::Lite
-    DBI
     Locale::TextDomain (libintl)
-    Text::Textile
-        and
-    Mojolicious::Plugin::Textdomain (https://bitbucket.org/nuclon/mojolicious-plugin-textdomain)
-
+    Text::Markdown
+    Mojolicious::Plugin::Textdomain (https://github.com/grisxa/mojolicious-plugin-textdomain)
 
 Alexander Sapozhnikov
 http://shoorick.ru/
 shoorick@cpan.org
 
+Natalia Serrano
+github@womanderful.com

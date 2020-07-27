@@ -2,11 +2,11 @@
 
 =head1 NAME
 
-mojowka
+mojowka-didi
 
 =head1 DESCRIPTION
 
-mojowka - is a L<Mojolicious::Lite> based lightweight wiki.
+mojowka-didi is a L<mojowka|https://github.com/shoorick/mojowka> spin-off with reduced functionality—down to the feature set of L<didiwiki|http://didiwiki.wikidot.com/>.
 
 =head1 AUTHOR
 
@@ -15,10 +15,13 @@ L<http://shoorick.ru/>
 L<< E<lt>shoorick@cpan.orgE<gt> >>
 2000-2015
 
+Natalia Serrano
+L<< E<lt>natalia@womanderful.comE<gt> >>
+2020
+
 =head1 LICENSE
 
-This program is free software, you can redistribute it and/or modify
-it under the same terms as Perl itself.
+This program is free software, you can redistribute it and/or modify it under the same terms as Perl itself.
 
 =cut
 
@@ -26,8 +29,6 @@ use utf8;
 use open ':encoding(UTF-8)';
 use Mojolicious::Lite;
 use Locale::TextDomain qw/mojowka locale/;
-no warnings 'redefine';
-
 use File::Basename 'basename';
 use File::Path     'mkpath';
 use Mojo::ByteStream 'b';
@@ -37,7 +38,7 @@ use Text::Markdown;
 our $VERSION=0.05;
 
 my $log = Mojo::Log->new;
-my $DATADIR = $ENV{'MOJOWKA_DATADIR'} || '/var/lib/mojowka';
+my $DATADIR = $ENV{'MOJOWKA_DIDI_DATADIR'} || '/var/lib/mojowka';
 my $md = Text::Markdown->new;
 my $index_text = <<'EOF';
 Welcome to mojowka-didi
@@ -197,8 +198,7 @@ sub get_article {
 
 =head2 edit_article
 
-Draw editing form for article found by its ID
-and process this form.
+Draw editing form for article found by its title and process this form.
 
 =cut
 

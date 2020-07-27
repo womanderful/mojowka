@@ -3,18 +3,18 @@ use Module::Build;
 #created by eumm-migrate.pl
 
 my $build = Module::Build->new(
-  'dist_abstract' => 'lightweight wiki based on top of Mojolicious::Lite',
+  'dist_abstract' => 'lightweight wiki based on top of mojowka',
   'license' => 'perl',
   'build_requires' => {
   },
-  'dist_author' => 'Alexander Sapozhnikov <shoorick@cpan.org>',
-  'module_name' => 'mojowka',
+  'dist_author' => [ 'Alexander Sapozhnikov <shoorick@cpan.org>', 'Natalia Serrano <github@womanderful.com>' ],
+  'module_name' => 'mojowka-didi',
   'meta_merge' => {
     'keywords' => [
       'wiki',
     ],
     'resources' => {
-      'repository' => 'http://github.com/shoorick/mojowka'
+      'repository' => 'http://github.com/womanderful/mojowka'
     }
   },
   'requires' => {
@@ -27,7 +27,7 @@ my $build = Module::Build->new(
     'Locale::TextDomain' => 0,
     'Mojolicious::Plugin::Textdomain' => 0,
   },
-  'dist_version_from' => 'mojowka'
+  'dist_version_from' => 'mojowka-didi'
 );
 
 $build->create_build_script();

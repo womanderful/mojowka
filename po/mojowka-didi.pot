@@ -1,102 +1,101 @@
-# Spanish language pack for mojowka.
-# Copyright (C) 2020 Natalia Serrano
-# This file is distributed under the same license as the mojowka.
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 0.0.3\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-07-29 18:29+0200\n"
-"PO-Revision-Date: 2020-07-27 14:05+0200\n"
-"Last-Translator: Natalia Serrano <foo@example.org>\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
 #: ../mojowka-didi.tmp:219
 msgid "Page content can not be empty"
-msgstr "El contenido no puede estar en blanco"
+msgstr ""
 
 #: ../mojowka-didi.tmp:221 ../mojowka-didi.tmp:270
 msgid "Edit page"
-msgstr "Editar página"
+msgstr ""
 
 #: ../mojowka-didi.tmp:229
-#, fuzzy
 msgid "Can not save: error opening article"
-msgstr "No se puede guardar: error al abrir"
+msgstr ""
 
 #: ../mojowka-didi.tmp:236
-#, fuzzy
 msgid "Can not save: error writing article"
-msgstr "No se puede guardar: error al escribir"
+msgstr ""
 
 #: ../mojowka-didi.tmp:241
 msgid "Changes were saved"
-msgstr "Se guardaron los cambios"
+msgstr ""
 
 #: ../mojowka-didi.tmp:248
 msgid "Errors occured"
-msgstr "Hubo algún error"
+msgstr ""
 
 #: ../mojowka-didi.tmp:296
 msgid "Page was deleted"
-msgstr "Se borró la página"
+msgstr ""
 
 #: ../mojowka-didi.tmp:317 ../mojowka-didi.tmp:403
 msgid "Search"
-msgstr "Buscar"
+msgstr ""
 
 #: ../mojowka-didi.tmp:327
 msgid "Invalid regular expression"
-msgstr "Expresión regular no v-alida"
+msgstr ""
 
 #: ../mojowka-didi.tmp:348
 msgid "Exact matching found"
-msgstr "Se encontró el texto exacto"
+msgstr ""
 
 #: ../mojowka-didi.tmp:353
 #, perl-brace-format
 msgid "Found {count} page"
 msgid_plural "Found {count} pages"
-msgstr[0] "Se encontró {count} página"
-msgstr[1] "Se encontraron {count} páginas"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../mojowka-didi.tmp:394 ../mojowka-didi.tmp:404
 msgid "Sitemap"
-msgstr "Mapa"
+msgstr ""
 
 #: ../mojowka-didi.tmp:530
 msgid "Bold (Ctrl+B)"
-msgstr "Negrita (Ctrl+B)"
+msgstr ""
 
 #: ../mojowka-didi.tmp:531
 msgid "Italic (Ctrl+I)"
-msgstr "Cursiva (Ctrl+I)"
+msgstr ""
 
 #: ../mojowka-didi.tmp:532
 msgid "Header 1"
-msgstr "Cabecera 1"
+msgstr ""
 
 #: ../mojowka-didi.tmp:533
 msgid "Header 2"
-msgstr "Cabecera 2"
+msgstr ""
 
 #: ../mojowka-didi.tmp:534
 msgid "Header 3"
-msgstr "Cabecera 3"
+msgstr ""
 
 #: ../mojowka-didi.tmp:535
 msgid "Unordered list item"
-msgstr "Entrada de lista sin ordenar"
+msgstr ""
 
 #: ../mojowka-didi.tmp:536
 msgid "Ordered list item"
-msgstr "Entrada de lista ordenada"
+msgstr ""
 
 #: ../mojowka-didi.tmp:542
 msgid "Save"
@@ -105,12 +104,3 @@ msgstr ""
 #: ../mojowka-didi.tmp:569
 msgid "Welcome"
 msgstr ""
-
-#~ msgid "Preview"
-#~ msgstr "Vista previa"
-
-#~ msgid "Delete page"
-#~ msgstr "Borrar página"
-
-#~ msgid "ERROR"
-#~ msgstr "ERROR"

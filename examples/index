@@ -1,0 +1,7 @@
+## Welcome to mojowka-didi
+
+Mojowka-didi is a small and simple wiki implementation based on mojowka (which in turn is based on Mojolicious::Lite).
+
+There is no setup needed. No database or user authentication.
+
+It's intended for personal note-taking, "to do" lists, and any other uses you can think of. You can write articles in plain text or markdown.

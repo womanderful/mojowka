@@ -1,6 +1,6 @@
 MO_PATH=../locale/
-LOCALIZABLE=../mojowka
-TEMPLATE=mojowka.pot
+LOCALIZABLE=../mojowka-didi
+TEMPLATE=mojowka-didi.pot
 
 .PHONY: compile update clean help
 compile:
