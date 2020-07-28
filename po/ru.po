@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-04-24 15:01+0600\n"
+"POT-Creation-Date: 2020-07-28 14:20+0200\n"
 "PO-Revision-Date: 2013-05-09 02:00+0600\n"
 "Last-Translator: Alexander Sapozhnikov <shoorick@cpan.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,329 +18,280 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: ../mojowka.tmp:99
-msgid "Thanks for logging in"
-msgstr "Спасибо, что зашли"
-
-#: ../mojowka.tmp:102
-msgid "Wrong username or password"
-msgstr "Неправильное имя пользователя или пароль"
-
-#: ../mojowka.tmp:158
-msgid "You are not logged in"
-msgstr "Вы не вошли"
-
-#: ../mojowka.tmp:291
-msgid "Title must be unique"
-msgstr "Заголовок должен быть уникальным"
-
-#: ../mojowka.tmp:297
+#: ../mojowka.tmp:226
 msgid "Page content can not be empty"
 msgstr "Содержимое страницы не может быть пустым"
 
-#: ../mojowka.tmp:307 ../mojowka.tmp:343
+#: ../mojowka.tmp:228 ../mojowka.tmp:277
+#, fuzzy
+msgid "Edit page"
+msgstr "Изменить эту страницу"
+
+#: ../mojowka.tmp:236
+#, fuzzy
+msgid "Can not save: error opening article"
+msgstr "Не могу сохранить"
+
+#: ../mojowka.tmp:243
+#, fuzzy
+msgid "Can not save: error writing article"
+msgstr "Не могу сохранить"
+
+#: ../mojowka.tmp:248
+#, fuzzy
+msgid "Changes were saved"
+msgstr "Изменения сохранены"
+
+#: ../mojowka.tmp:255
 msgid "Errors occured"
 msgstr "Произошли ошибки"
 
-#: ../mojowka.tmp:333
-msgid "Changes was saved"
-msgstr "Изменения сохранены"
-
-#: ../mojowka.tmp:338
-msgid "Can not save"
-msgstr "Не могу сохранить"
-
-#: ../mojowka.tmp:358
-msgid "Editing"
-msgstr "Редактирование"
-
-#: ../mojowka.tmp:370
-msgid "New page"
-msgstr "Новая страница"
-
-#: ../mojowka.tmp:396
+#: ../mojowka.tmp:303
 msgid "Page was deleted"
 msgstr "Страница удалена"
 
-#: ../mojowka.tmp:453
-msgid "Permission denied"
-msgstr "Доступ запрещён"
-
-#: ../mojowka.tmp:466
+#: ../mojowka.tmp:324 ../mojowka.tmp:410
 msgid "Search"
 msgstr "Поиск"
 
-#: ../mojowka.tmp:477
+#: ../mojowka.tmp:334
+msgid "Invalid regular expression"
+msgstr ""
+
+#: ../mojowka.tmp:355
 msgid "Exact matching found"
 msgstr "Найдено точное соответствие"
 
-#: ../mojowka.tmp:491
+#: ../mojowka.tmp:360
+#, perl-brace-format
 msgid "Found {count} page"
 msgid_plural "Found {count} pages"
 msgstr[0] "Найдена {count} страница"
 msgstr[1] "Найдено {count} страницы"
 msgstr[2] "Найдено {count} страниц"
 
-#: ../mojowka.tmp:527
-msgid "Passwords does not match"
-msgstr "Пароли не совпадают"
-
-#: ../mojowka.tmp:542
-msgid "Wrong old password"
-msgstr "Неверный старый пароль"
-
-#: ../mojowka.tmp:554
-msgid "Password was changed"
-msgstr "Пароль изменён"
-
-#: ../mojowka.tmp:582 ../mojowka.tmp:590
-msgid "Upload failed"
-msgstr "Загрузка не удалась"
-
-#: ../mojowka.tmp:583
-msgid "File is not specified."
-msgstr "Файл не указан."
-
-#: ../mojowka.tmp:591
-msgid "Image size is too large."
-msgstr "Размер изображения слишком велик."
-
-#: ../mojowka.tmp:607
-msgid "Upload failed. Content type is wrong."
-msgstr "Загрузка не удалась. Неверный тип содержимого."
-
-#: ../mojowka.tmp:626
-msgid "Image uploaded"
-msgstr "Изображение загружено"
-
-#: ../mojowka.tmp:636
-msgid "User list"
-msgstr "Список пользователей"
-
-#: ../mojowka.tmp:645
-msgid "Login"
-msgstr "Войти"
-
-#: ../mojowka.tmp:648
-msgid "Username"
-msgstr "Имя пользователя"
-
-#: ../mojowka.tmp:649
-msgid "Password"
-msgstr "Пароль"
-
-#: ../mojowka.tmp:720
-msgid "Change"
-msgstr "Изменить"
-
-#: ../mojowka.tmp:747
-msgid "Find"
-msgstr "Найти"
-
-#: ../mojowka.tmp:763
-msgid "Just uploaded"
-msgstr "Только что загружено"
-
-#: ../mojowka.tmp:881
-msgid "Bold (Ctrl+B)"
-msgstr "Жирный (Ctrl+B)"
-
-#: ../mojowka.tmp:882
-msgid "Italic (Ctrl+I)"
-msgstr "Курсив (Ctrl+I)"
-
-#: ../mojowka.tmp:883
-msgid "Header 1"
-msgstr "Заголовок 1"
-
-#: ../mojowka.tmp:884
-msgid "Header 2"
-msgstr "Заголовок 2"
-
-#: ../mojowka.tmp:885
-msgid "Header 3"
-msgstr "Заголовок 3"
-
-#: ../mojowka.tmp:886
-msgid "Unordered list item"
-msgstr "Элемент ненумерованного списка"
-
-#: ../mojowka.tmp:887
-msgid "Ordered list item"
-msgstr "Элемент нумерованного списка"
-
-#: ../mojowka.tmp:894
-msgid "Preview"
-msgstr "Просмотр"
-
-#: ../mojowka.tmp:896
-msgid "Cancel"
-msgstr "Отменить"
-
-#: ../mojowka.tmp:900
-msgid "Delete page"
-msgstr "Удалить страницу"
-
-#: ../mojowka.tmp:910
-msgid "ERROR"
-msgstr "ОШИБКА"
-
-# manually added
-msgid "Can not preview"
-msgstr "Не могу показать"
-
-#: ../mojowka:893
-msgid "Save"
-msgstr "Сохранить"
-
-#: ../mojowka:677
-msgid "Strong password"
-msgstr "Хороший пароль"
-
-#: ../mojowka:680
-msgid "Empty password"
-msgstr "Пустой пароль"
-
-#: ../mojowka:683
-msgid "Too short password"
-msgstr "Слишком короткий пароль"
-
-#: ../mojowka:686
-msgid "Password and login are equal"
-msgstr "Пароль совпадает с именем пользователя"
-
-#: ../mojowka:689
-msgid "Missing digits"
-msgstr "Отсутствуют цифры"
-
-#: ../mojowka:692
-msgid "Missing small letters"
-msgstr "Отсутствуют маленькие буквы"
-
-#: ../mojowka:695
-msgid "Missing capital letters"
-msgstr "Отсутствуют большие буквы"
-
-#: ../mojowka:775
-msgid "Search for &ldquo;{title}&rdquo;"
-msgstr "Искать «{title}»"
-
-#: ../mojowka:777
-msgid "Create page &ldquo;{title}&rdquo;"
-msgstr "Создать страницу «{title}»"
-
-# extracted by extract.pl
-
-#: ../mojowka:665
-#: ../mojowka:711
-#: ../mojowka:942
-msgid "Change password"
-msgstr "Сменить пароль"
-
-#: ../mojowka:714
-msgid "Old Password"
-msgstr "Старый пароль"
-
-#: ../mojowka:715
-msgid "New Password"
-msgstr "Новый пароль"
-
-#: ../mojowka:717
-msgid "Repeat new password"
-msgstr "Повторите новый пароль"
-
-#: ../mojowka:726
+#: ../mojowka.tmp:401 ../mojowka.tmp:411
 msgid "Sitemap"
 msgstr "Карта сайта"
 
-#: ../mojowka:731
-msgid "Main page"
-msgstr "Главная страница"
+#: ../mojowka.tmp:537
+msgid "Bold (Ctrl+B)"
+msgstr "Жирный (Ctrl+B)"
 
-#: ../mojowka:735
-msgid "Special pages"
-msgstr "Специальные страницы"
+#: ../mojowka.tmp:538
+msgid "Italic (Ctrl+I)"
+msgstr "Курсив (Ctrl+I)"
 
-#: ../mojowka:760
-msgid "Image uploaded and saved as {link}"
-msgstr "Изображение загружено и сохранено как {link}"
+#: ../mojowka.tmp:539
+msgid "Header 1"
+msgstr "Заголовок 1"
 
-#: ../mojowka:762
-msgid "You can insert this image to pages with following code:"
-msgstr "Вы можете вставить изображение на страницы, используя код:"
+#: ../mojowka.tmp:540
+msgid "Header 2"
+msgstr "Заголовок 2"
 
-#: ../mojowka:770
-msgid "Not Found - ERROR 404"
-msgstr "Не найдено - ОШИБКА 404"
+#: ../mojowka.tmp:541
+msgid "Header 3"
+msgstr "Заголовок 3"
 
-#: ../mojowka:771
-msgid "Not found"
-msgstr "Не найдено"
+#: ../mojowka.tmp:542
+msgid "Unordered list item"
+msgstr "Элемент ненумерованного списка"
 
-#: ../mojowka:771
-msgid "Document you requested was not found."
-msgstr "Запрошенный документ не найден."
+#: ../mojowka.tmp:543
+msgid "Ordered list item"
+msgstr "Элемент нумерованного списка"
 
-#: ../mojowka:784
-msgid "Image you requested was not found."
-msgstr "Запрошенное изображение не найдено."
+#: ../mojowka.tmp:550
+msgid "Preview"
+msgstr "Просмотр"
 
-#: ../mojowka:789
-msgid "Choose an image"
-msgstr "Выберите изображение"
+#: ../mojowka.tmp:552
+msgid "Delete page"
+msgstr "Удалить страницу"
 
-#: ../mojowka:790
-msgid "and"
-msgstr "и"
+#: ../mojowka.tmp:561
+msgid "ERROR"
+msgstr "ОШИБКА"
 
-#: ../mojowka:791
-msgid "Upload"
-msgstr "Загрузите"
+#~ msgid "Thanks for logging in"
+#~ msgstr "Спасибо, что зашли"
 
-#: ../mojowka:877
-msgid "Title"
-msgstr "Заголовок"
+#~ msgid "Wrong username or password"
+#~ msgstr "Неправильное имя пользователя или пароль"
 
-#: ../mojowka:879
-msgid "Content"
-msgstr "Содержимое"
+#~ msgid "You are not logged in"
+#~ msgstr "Вы не вошли"
 
-#: ../mojowka:881
-msgid "Bold"
-msgstr "Жирный"
+#~ msgid "Title must be unique"
+#~ msgstr "Заголовок должен быть уникальным"
 
-#: ../mojowka:882
-msgid "Italic"
-msgstr "Курсив"
+#~ msgid "Editing"
+#~ msgstr "Редактирование"
 
-#: ../mojowka:890
-msgid "textile syntax"
-msgstr "язык разметки"
+#~ msgid "New page"
+#~ msgstr "Новая страница"
 
-#: ../mojowka:900
-msgid "Do you really want to delete this page?"
-msgstr "Вы действительно хотите удалить страницу?"
+#~ msgid "Permission denied"
+#~ msgstr "Доступ запрещён"
 
-#: ../mojowka:924
-msgid "Welcome"
-msgstr "Добро пожаловать"
+#~ msgid "Passwords does not match"
+#~ msgstr "Пароли не совпадают"
 
-#: ../mojowka:940
-msgid "Logged as"
-msgstr "Вошёл как"
+#~ msgid "Wrong old password"
+#~ msgstr "Неверный старый пароль"
 
-#: ../mojowka:943
-msgid "Logout"
-msgstr "Выйти"
+#~ msgid "Password was changed"
+#~ msgstr "Пароль изменён"
 
-#: ../mojowka:945
-msgid "Edit this page"
-msgstr "Изменить эту страницу"
+#~ msgid "Upload failed"
+#~ msgstr "Загрузка не удалась"
 
-#: ../mojowka:981
-msgid "Language"
-msgstr "Язык"
+#~ msgid "File is not specified."
+#~ msgstr "Файл не указан."
 
-#: ../mojowka:792
-msgid "Tags"
-msgstr "Метки"
+#~ msgid "Image size is too large."
+#~ msgstr "Размер изображения слишком велик."
+
+#~ msgid "Upload failed. Content type is wrong."
+#~ msgstr "Загрузка не удалась. Неверный тип содержимого."
+
+#~ msgid "Image uploaded"
+#~ msgstr "Изображение загружено"
+
+#~ msgid "User list"
+#~ msgstr "Список пользователей"
+
+#~ msgid "Login"
+#~ msgstr "Войти"
+
+#~ msgid "Username"
+#~ msgstr "Имя пользователя"
+
+#~ msgid "Password"
+#~ msgstr "Пароль"
+
+#~ msgid "Change"
+#~ msgstr "Изменить"
+
+#~ msgid "Find"
+#~ msgstr "Найти"
+
+#~ msgid "Just uploaded"
+#~ msgstr "Только что загружено"
+
+#~ msgid "Cancel"
+#~ msgstr "Отменить"
+
+# manually added
+#~ msgid "Can not preview"
+#~ msgstr "Не могу показать"
+
+#~ msgid "Save"
+#~ msgstr "Сохранить"
+
+#~ msgid "Strong password"
+#~ msgstr "Хороший пароль"
+
+#~ msgid "Empty password"
+#~ msgstr "Пустой пароль"
+
+#~ msgid "Too short password"
+#~ msgstr "Слишком короткий пароль"
+
+#~ msgid "Password and login are equal"
+#~ msgstr "Пароль совпадает с именем пользователя"
+
+#~ msgid "Missing digits"
+#~ msgstr "Отсутствуют цифры"
+
+#~ msgid "Missing small letters"
+#~ msgstr "Отсутствуют маленькие буквы"
+
+#~ msgid "Missing capital letters"
+#~ msgstr "Отсутствуют большие буквы"
+
+#~ msgid "Search for &ldquo;{title}&rdquo;"
+#~ msgstr "Искать «{title}»"
+
+#~ msgid "Create page &ldquo;{title}&rdquo;"
+#~ msgstr "Создать страницу «{title}»"
+
+# extracted by extract.pl
+#~ msgid "Change password"
+#~ msgstr "Сменить пароль"
+
+#~ msgid "Old Password"
+#~ msgstr "Старый пароль"
+
+#~ msgid "New Password"
+#~ msgstr "Новый пароль"
+
+#~ msgid "Repeat new password"
+#~ msgstr "Повторите новый пароль"
+
+#~ msgid "Main page"
+#~ msgstr "Главная страница"
+
+#~ msgid "Special pages"
+#~ msgstr "Специальные страницы"
+
+#~ msgid "Image uploaded and saved as {link}"
+#~ msgstr "Изображение загружено и сохранено как {link}"
+
+#~ msgid "You can insert this image to pages with following code:"
+#~ msgstr "Вы можете вставить изображение на страницы, используя код:"
+
+#~ msgid "Not Found - ERROR 404"
+#~ msgstr "Не найдено - ОШИБКА 404"
+
+#~ msgid "Not found"
+#~ msgstr "Не найдено"
+
+#~ msgid "Document you requested was not found."
+#~ msgstr "Запрошенный документ не найден."
+
+#~ msgid "Image you requested was not found."
+#~ msgstr "Запрошенное изображение не найдено."
+
+#~ msgid "Choose an image"
+#~ msgstr "Выберите изображение"
+
+#~ msgid "and"
+#~ msgstr "и"
+
+#~ msgid "Upload"
+#~ msgstr "Загрузите"
+
+#~ msgid "Title"
+#~ msgstr "Заголовок"
+
+#~ msgid "Content"
+#~ msgstr "Содержимое"
+
+#~ msgid "Bold"
+#~ msgstr "Жирный"
+
+#~ msgid "Italic"
+#~ msgstr "Курсив"
+
+#~ msgid "textile syntax"
+#~ msgstr "язык разметки"
+
+#~ msgid "Do you really want to delete this page?"
+#~ msgstr "Вы действительно хотите удалить страницу?"
+
+#~ msgid "Welcome"
+#~ msgstr "Добро пожаловать"
+
+#~ msgid "Logged as"
+#~ msgstr "Вошёл как"
+
+#~ msgid "Logout"
+#~ msgstr "Выйти"
+
+#~ msgid "Language"
+#~ msgstr "Язык"
+
+#~ msgid "Tags"
+#~ msgstr "Метки"

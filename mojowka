@@ -60,7 +60,7 @@ app->hook (
 plugin 'textdomain' => {
     'domain'      => 'mojowka',
     'search_dirs' => [ 'locale' ],
-    'available_languages' => [ 'en', 'ru' ],
+    'available_languages' => [ 'en', 'es', 'ru' ],
     'default_language'    => 'en',
 };
 app->hook ('before_routes' => sub {
@@ -241,14 +241,14 @@ sub edit_article {
 
         open my $fd, '>', $file or do {
             $log->warn ("open: '$file': $!");
-            push (@errors, __ 'Can not save: open');
+            push (@errors, __ 'Can not save: error opening article');
             goto END;
         };
 
         $article_content = sprintf "%s\n", join "\n", split /\x0d\x0a/, $article_content;
         print $fd $article_content or do {
             $log->warn ("write: '$file': $!");
-            push (@errors, __ 'Can not save: write');
+            push (@errors, __ 'Can not save: error writing article');
             goto END;
         };
         close $fd;
@@ -612,7 +612,7 @@ button:hover{border-color:#69c}
     href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
     <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>">Edit</a></li><% } %>
     <li><form
-    action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option></select></form></li>
+    action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option></select></form></li>
     <li><form action="<%= url_for '/search' %>"><input id="search" type="text" name="query"></form></li>
     <li><form action="<%= url_for '/edit' %>">  <input id="edit"   type="text" name="title"></form></li>
     </ul>

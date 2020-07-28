@@ -24,6 +24,6 @@ up update: $(LOCALIZABLE)
 	done
 	@echo
 clean:
-	@rm -f *~
+	@rm -f *~ $(LOCALIZABLE).tmp
 help:
 	@echo 'Available goals: compile, update, clean, help.'
