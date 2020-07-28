@@ -202,7 +202,7 @@ sub get_article {
     close $fd;
 
     $self->render (
-        'content'   => markup ($contents),
+        'content'   => ($contents ? markup ($contents) : ''),
         'title'  => $title,
         'layout' => 'default',
         'show_edit' => 1,
