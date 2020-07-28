@@ -23,6 +23,7 @@ it under the same terms as Perl itself.
 =cut
 
 use utf8;
+use open ':encoding(UTF-8)';
 use Mojolicious::Lite;
 use Locale::TextDomain qw/mojowka locale/;
 no warnings 'redefine';
@@ -283,8 +284,8 @@ sub edit_article {
     return $self->render (
         'template'          => 'edit_article',
         'title'             => b (__ 'Edit page')->decode ('UTF-8'),
-        'article_content'   => b ($contents)->decode ('UTF-8'),
-        'article_title'     => b ($article_title)->decode ('UTF-8'),
+        'article_content'   => $contents,
+        'article_title'     => $article_title,
     );
 }
 
