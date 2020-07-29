@@ -32,13 +32,13 @@ use File::Basename 'basename';
 use File::Path     'mkpath';
 use Mojo::ByteStream 'b';
 use Mojo::Log;
-use Text::Textile;
+use Text::Markdown;
 
 our $VERSION=0.05;
 
 my $log = Mojo::Log->new;
 my $DATADIR = $ENV{'MOJOWKA_DATADIR'} || '/var/lib/mojowka';
-our $txt = Text::Textile->new; $txt->charset ('utf-8');
+my $md = Text::Markdown->new;
 my $index_text = <<'EOF';
 Welcome to mojowka-didi
 
@@ -117,22 +117,7 @@ Convert lightweight markup into HTML.
 sub markup {
     local $_ = shift || return;
 
-    # [[internal links]]
-    s{
-        \[\[
-            (([^\]\|]+)\|)?
-             ([^\]\|]+)
-        \]\]
-    }{
-        my $link  = $2 || $3;
-           $link  =~ tr/ /_/;
-        my $text  = $3;
-        sprintf q{"%s":/%s}, $text, $link;
-    }gex;
-
-#    $log->debug ("Textiling of $_");
-    return $txt->process ($_);
-
+    return $md->markdown ($_);
 }
 
 
@@ -190,7 +175,6 @@ sub get_article {
         'template' => 'not_found',
     ) unless -e $file;
 
-    my $contents;
     open my $fd, '<', $file or do {
         $log->warn ("open: '$file': $!");
         return $self->render (
@@ -199,7 +183,7 @@ sub get_article {
             'status'   => 500,
         );
     };
-    { local $/; $contents = <$fd>; }
+    my $contents; { local $/; $contents = <$fd>; }
     close $fd;
 
     $self->render (
@@ -552,7 +536,7 @@ button:hover{border-color:#69c}
 <button type="button" id="btn_ol" title="<%= __ 'Ordered list item' %>"><%= __ 'Ordered list item' %></button>
 </span>
 <br><textarea name="article" id="article"><%= $article_content %></textarea>
-<br><a href="http://search.cpan.org/perldoc?Text::Textile#SYNTAX"><%= __ 'textile syntax' %></a>
+<br><a href="https://daringfireball.net/projects/markdown/syntax"><%= __ 'Markdown syntax' %></a>
 </dd>
 </dl>
 <input type="submit" value="<%= __ 'Save' %>">
