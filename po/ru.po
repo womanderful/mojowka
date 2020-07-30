@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-29 18:29+0200\n"
+"POT-Creation-Date: 2020-07-31 10:07+0200\n"
 "PO-Revision-Date: 2013-05-09 02:00+0600\n"
 "Last-Translator: Alexander Sapozhnikov <shoorick@cpan.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,51 +18,83 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: ../mojowka-didi.tmp:219
+#: ../mojowka-didi.tmp:92
+msgid "Recent"
+msgstr ""
+
+#: ../mojowka-didi.tmp:93
+msgid "Older than 7 days"
+msgstr ""
+
+#: ../mojowka-didi.tmp:94
+msgid "Older than 1 month"
+msgstr ""
+
+#: ../mojowka-didi.tmp:95
+msgid "Older than 3 months"
+msgstr ""
+
+#: ../mojowka-didi.tmp:96
+msgid "Older than 6 months"
+msgstr ""
+
+#: ../mojowka-didi.tmp:97
+msgid "Older than 1 year"
+msgstr ""
+
+#: ../mojowka-didi.tmp:98
+msgid "Older than 2 years"
+msgstr ""
+
+#: ../mojowka-didi.tmp:99
+msgid "Older than 5 years"
+msgstr ""
+
+#: ../mojowka-didi.tmp:254
 msgid "Page content can not be empty"
 msgstr "Содержимое страницы не может быть пустым"
 
-#: ../mojowka-didi.tmp:221 ../mojowka-didi.tmp:270
+#: ../mojowka-didi.tmp:256 ../mojowka-didi.tmp:305
 #, fuzzy
 msgid "Edit page"
 msgstr "Изменить эту страницу"
 
-#: ../mojowka-didi.tmp:229
+#: ../mojowka-didi.tmp:264
 #, fuzzy
 msgid "Can not save: error opening article"
 msgstr "Не могу сохранить"
 
-#: ../mojowka-didi.tmp:236
+#: ../mojowka-didi.tmp:271
 #, fuzzy
 msgid "Can not save: error writing article"
 msgstr "Не могу сохранить"
 
-#: ../mojowka-didi.tmp:241
+#: ../mojowka-didi.tmp:276
 #, fuzzy
 msgid "Changes were saved"
 msgstr "Изменения сохранены"
 
-#: ../mojowka-didi.tmp:248
+#: ../mojowka-didi.tmp:283
 msgid "Errors occured"
 msgstr "Произошли ошибки"
 
-#: ../mojowka-didi.tmp:296
+#: ../mojowka-didi.tmp:331
 msgid "Page was deleted"
 msgstr "Страница удалена"
 
-#: ../mojowka-didi.tmp:317 ../mojowka-didi.tmp:403
+#: ../mojowka-didi.tmp:352 ../mojowka-didi.tmp:440
 msgid "Search"
 msgstr "Поиск"
 
-#: ../mojowka-didi.tmp:327
+#: ../mojowka-didi.tmp:362
 msgid "Invalid regular expression"
 msgstr ""
 
-#: ../mojowka-didi.tmp:348
+#: ../mojowka-didi.tmp:383
 msgid "Exact matching found"
 msgstr "Найдено точное соответствие"
 
-#: ../mojowka-didi.tmp:353
+#: ../mojowka-didi.tmp:388
 #, perl-brace-format
 msgid "Found {count} page"
 msgid_plural "Found {count} pages"
@@ -70,43 +102,43 @@ msgstr[0] "Найдена {count} страница"
 msgstr[1] "Найдено {count} страницы"
 msgstr[2] "Найдено {count} страниц"
 
-#: ../mojowka-didi.tmp:394 ../mojowka-didi.tmp:404
+#: ../mojowka-didi.tmp:429 ../mojowka-didi.tmp:441
 msgid "Sitemap"
 msgstr "Карта сайта"
 
-#: ../mojowka-didi.tmp:530
+#: ../mojowka-didi.tmp:567
 msgid "Bold (Ctrl+B)"
 msgstr "Жирный (Ctrl+B)"
 
-#: ../mojowka-didi.tmp:531
+#: ../mojowka-didi.tmp:568
 msgid "Italic (Ctrl+I)"
 msgstr "Курсив (Ctrl+I)"
 
-#: ../mojowka-didi.tmp:532
+#: ../mojowka-didi.tmp:569
 msgid "Header 1"
 msgstr "Заголовок 1"
 
-#: ../mojowka-didi.tmp:533
+#: ../mojowka-didi.tmp:570
 msgid "Header 2"
 msgstr "Заголовок 2"
 
-#: ../mojowka-didi.tmp:534
+#: ../mojowka-didi.tmp:571
 msgid "Header 3"
 msgstr "Заголовок 3"
 
-#: ../mojowka-didi.tmp:535
+#: ../mojowka-didi.tmp:572
 msgid "Unordered list item"
 msgstr "Элемент ненумерованного списка"
 
-#: ../mojowka-didi.tmp:536
+#: ../mojowka-didi.tmp:573
 msgid "Ordered list item"
 msgstr "Элемент нумерованного списка"
 
-#: ../mojowka-didi.tmp:542
+#: ../mojowka-didi.tmp:579
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../mojowka-didi.tmp:569
+#: ../mojowka-didi.tmp:606
 msgid "Welcome"
 msgstr "Добро пожаловать"
 

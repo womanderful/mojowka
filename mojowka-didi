@@ -87,12 +87,43 @@ post '/preview' => sub {
 get '/sitemap' => sub {
     my $self = shift;
 
-    my $rows = [ grep { 'index.md' ne $_ } map { basename $_ } glob "$DATADIR/*" ];
-    foreach my $row (@$rows) {
-        $row = b ($row)->decode ('UTF-8')->to_string;
+    my $now = time;
+    my %mtimes = (
+        '/now'      => { mtime => $now,               header => __ 'Recent',              },
+        '/ago_7d'   => { mtime => $now - 86400*7,     header => __ 'Older than 7 days',   },
+        '/ago_1m'   => { mtime => $now - 86400*30,    header => __ 'Older than 1 month',  },
+        '/ago_3m'   => { mtime => $now - 86400*91,    header => __ 'Older than 3 months', },
+        '/ago_6m'   => { mtime => $now - 86400*182,   header => __ 'Older than 6 months', },
+        '/ago_1y'   => { mtime => $now - 86400*365,   header => __ 'Older than 1 year',   },
+        '/ago_2y'   => { mtime => $now - 86400*730,   header => __ 'Older than 2 years',  },
+        '/ago_5y'   => { mtime => $now - 86400*1826,  header => __ 'Older than 5 years',  },
+    );
+    foreach my $f (glob "$DATADIR/*") {
+        my $bn = basename $f;
+        next if 'index.md' eq $bn;
+        $mtimes{$bn}{'mtime'} = (stat $f)[9];
     }
+
+    my @buckets;
+    my $header;
+    foreach my $f (
+        reverse sort { $mtimes{$a}{'mtime'} <=> $mtimes{$b}{'mtime'} }
+        keys %mtimes
+    ) {
+        if ('/' eq substr $f, 0, 1) {
+            $header = $mtimes{$f}{'header'};
+            next;
+        }
+        if ($header) {
+            push @buckets, {};
+            $buckets[-1]{'header'} = b ($header)->decode ('UTF-8');
+        }
+        push @{ $buckets[-1]{'entries'} }, b ($f)->decode ('UTF-8');
+        undef $header;
+    }
+
     return $self->render (
-        'rows' => $rows,
+        'buckets' => \@buckets,
     );
 };
 
@@ -396,12 +427,14 @@ __DATA__
 
 @@ sitemap.html.ep
 % layout 'default', 'title' => __ 'Sitemap';
+% for my $bucket (@$buckets) {
+<h4><%= $bucket->{'header'} %></h4>
 <ul>
-% for my $row (@$rows) {
-%   my $link = $row;
-    <li><a href="<%= url_for "/$link" %>"><%= $row %></a></li>
-% }
+%     for my $link (@{ $bucket->{'entries'} }) {
+    <li><a href="<%= url_for "/$link" %>"><%= $link %></a></li>
+%     }
 </ul>
+% }
 <h2><%= __ 'Special pages' %></h2>
 <ul>
 <li><a href="<%= url_for '/search'  %>"><%= __ 'Search' %></a></li>
