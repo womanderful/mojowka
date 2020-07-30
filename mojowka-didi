@@ -41,9 +41,9 @@ my $log = Mojo::Log->new;
 my $DATADIR = $ENV{'MOJOWKA_DIDI_DATADIR'} || '/var/lib/mojowka';
 my $md = Text::Markdown->new;
 my $index_text = <<'EOF';
-Welcome to mojowka-didi
+## Welcome to mojowka-didi
 
-Mojowka-didi is a small and simple wiki implementation based on mojowka (which in turn is based on Mojolicious::Lite).
+Mojowka-didi is a small and simple wiki implementation based on `mojowka` (which in turn is based on `Mojolicious::Lite`).
 
 There is no setup needed. No database or user authentication.
 
@@ -87,7 +87,7 @@ post '/preview' => sub {
 get '/sitemap' => sub {
     my $self = shift;
 
-    my $rows = [ grep { 'index' ne $_ } map { basename $_ } glob "$DATADIR/*" ];
+    my $rows = [ grep { 'index.md' ne $_ } map { basename $_ } glob "$DATADIR/*" ];
     foreach my $row (@$rows) {
         $row = b ($row)->decode ('UTF-8')->to_string;
     }
@@ -129,12 +129,12 @@ Create the landing page.
 =cut
 
 sub create_index {
-    open my $fd, '>', "$DATADIR/index" or do {
-        $log->warn ("open: '$DATADIR/index': $!");
+    open my $fd, '>', "$DATADIR/index.md" or do {
+        $log->warn ("open: '$DATADIR/index.md': $!");
         return;
     };
     print $fd $index_text or do {
-        $log->warn ("write: '$DATADIR/index': $!");
+        $log->warn ("write: '$DATADIR/index.md': $!");
         return;
     };
     close $fd;
@@ -153,8 +153,8 @@ sub get_article {
     my $title = $self->param ('title') || '';
 
     if (!$title) {
-        if (!-e "$DATADIR/index") {
-            $log->debug ('index page does not exist');
+        if (!-e "$DATADIR/index.md") {
+            $log->debug ('index.md page does not exist');
             if (!create_index) {
                 return $self->render (
                     'template' => 'internal_server_error',
@@ -164,7 +164,7 @@ sub get_article {
             }
             $log->debug ('index page created');
         }
-        return $self->redirect_to ('/index');
+        return $self->redirect_to ('/index.md');
     }
 
     $title = basename $title;
@@ -187,6 +187,10 @@ sub get_article {
     my $contents; { local $/; $contents = <$fd>; }
     close $fd;
 
+    if ($title !~ /\.md$/) {
+        ## wrap the contents between <pre></pre> markers so we get a text/plain output
+        $contents = "<pre>\n$contents</pre>\n";
+    }
     $self->render (
         'content'   => ($contents ? markup ($contents) : ''),
         'title'  => $title,
@@ -593,7 +597,7 @@ button:hover{border-color:#69c}
 <% end %>
 
 @@ menu.html.ep
-<ul id="menu"><li><a href="<%= url_for '/index' %>"><%= __ 'Main page' %></a></li><li><a
+<ul id="menu"><li><a href="<%= url_for '/index.md' %>"><%= __ 'Main page' %></a></li><li><a
     href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
     <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>">Edit</a></li><% } %>
     <li><form
