@@ -127,6 +127,29 @@ get '/sitemap' => sub {
     );
 };
 
+get '/tags' => sub {
+    my $self = shift;
+
+    my %tags;
+
+    foreach my $f (glob "$DATADIR/*") {
+        my $bn = basename $f;
+        open my $fd, '<', $f or do { $log->warn ("open: '$f': $!"); next; };
+        while (my $line = <$fd>) {
+            chomp $line;
+            next if $line !~ /^\s*:([a-z0-9:_-]*):\s*$/;
+            for my $t (split /:/, $1) {
+                $tags{$t}{$bn} = undef;
+            }
+        }
+        close $fd;
+    }
+
+    return $self->render (
+        'tags' => \%tags,
+    );
+};
+
 get '/search/:query'                   => \&search;
 get '/search'                          => \&search;
 any '/edit/#title'                     => \&edit_article;
@@ -442,6 +465,24 @@ __DATA__
 </ul>
 
 
+@@ tags.html.ep
+% layout 'default', 'title' => __ 'Tags';
+<ul>
+% for my $tag (sort keys %$tags) {
+    <li><%= $tag %>:
+%     for my $link (sort keys %{ $tags->{$tag} }) {
+        <a href="<%= url_for "/$link" %>"><%= $link %></a>
+%     }
+    </li>
+% }
+</ul>
+<h2><%= __ 'Special pages' %></h2>
+<ul>
+<li><a href="<%= url_for '/search'  %>"><%= __ 'Search' %></a></li>
+<li><a href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
+</ul>
+
+
 @@ search.html.ep
 % layout 'default';
 <form action="<%= url_for '/search' %>">
@@ -630,11 +671,12 @@ button:hover{border-color:#69c}
 <% end %>
 
 @@ menu.html.ep
-<ul id="menu"><li><a href="<%= url_for '/index.md' %>"><%= __ 'Main page' %></a></li><li><a
-    href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
+<ul id="menu">
+    <li><a href="<%= url_for '/index.md' %>"><%= __ 'Main page' %></a></li>
+    <li><a href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
+    <li><a href="<%= url_for '/tags' %>"><%= __ 'Tags' %></a></li>
     <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>">Edit</a></li><% } %>
-    <li><form
-    action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option></select></form></li>
+    <li><form action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option></select></form></li>
     <li><form action="<%= url_for '/search' %>"><input id="search" type="text" name="query"></form></li>
     <li><form action="<%= url_for '/edit' %>">  <input id="edit"   type="text" name="title"></form></li>
-    </ul>
+</ul>
