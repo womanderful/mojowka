@@ -522,7 +522,15 @@ __DATA__
 @@ edit_article.html.ep
 % layout 'default';
 % use Mojo::ByteStream 'b';
-%= include 'jquery';
+<%= javascript '/jquery.min.js' %>
+<%= javascript begin %>
+    if (typeof jQuery == 'undefined') {
+      var e = document.createElement('script');
+      e.src = '/js/jquery.js';
+      e.type = 'text/javascript';
+      document.getElementsByTagName("head")[0].appendChild(e);
+    }
+<% end %>
 <script type="text/javascript" src="<%= url_for '/jquery-ui-1.8.11.custom.min.js' %>"></script>
 <script type="text/javascript" src="<%= url_for '/jquery.caret.1.02.min.js' %>"></script>
 <script type="text/javascript">
@@ -659,16 +667,6 @@ button:hover{border-color:#69c}
     </body>
 </html>
 
-@@ jquery.html.ep
-<%= javascript '/jquery.min.js' %>
-<%= javascript begin %>
-    if (typeof jQuery == 'undefined') {
-      var e = document.createElement('script');
-      e.src = '/js/jquery.js';
-      e.type = 'text/javascript';
-      document.getElementsByTagName("head")[0].appendChild(e);
-    }
-<% end %>
 
 @@ menu.html.ep
 <ul id="menu">
