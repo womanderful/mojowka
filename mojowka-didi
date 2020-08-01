@@ -75,6 +75,38 @@ app->secrets (['mojoWka-didi']);
 
 # Routes
 
+under sub {
+    my $self = shift;
+    $self->stash ('menu_index'                => __ 'Main page');
+    $self->stash ('menu_sitemap'              => __ 'Sitemap');
+    $self->stash ('menu_tags'                 => __ 'Tags');
+    $self->stash ('menu_edit'                 => __ 'Edit');
+    $self->stash ('menu_language'             => __ 'Language');
+    $self->stash ('layout_error_deftitle'     => __ 'ERROR');
+    $self->stash ('layout_default_deftitle'   => __ 'Welcome');
+    $self->stash ('form_dt_title'             => __ 'Title');
+    $self->stash ('form_dt_content'           => __ 'Content');
+    $self->stash ('form_toolbar_bold_title'   => __ 'Bold (Ctrl+B)');
+    $self->stash ('form_toolbar_bold_text'    => __ 'Bold');
+    $self->stash ('form_toolbar_italic_title' => __ 'Italic (Ctrl+I)');
+    $self->stash ('form_toolbar_italic_text'  => __ 'Italic');
+    $self->stash ('form_toolbar_h1_title'     => __ 'Header 1');
+    $self->stash ('form_toolbar_h1_text'      => __ 'Header 1');
+    $self->stash ('form_toolbar_h2_title'     => __ 'Header 2');
+    $self->stash ('form_toolbar_h2_text'      => __ 'Header 2');
+    $self->stash ('form_toolbar_h3_title'     => __ 'Header 3');
+    $self->stash ('form_toolbar_h3_text'      => __ 'Header 3');
+    $self->stash ('form_toolbar_ul_title'     => __ 'Unordered list item');
+    $self->stash ('form_toolbar_ul_text'      => __ 'Unordered list item');
+    $self->stash ('form_toolbar_ol_title'     => __ 'Ordered list item');
+    $self->stash ('form_toolbar_ol_text'      => __ 'Ordered list item');
+    $self->stash ('form_md_syntax'            => __ 'Markdown syntax');
+    $self->stash ('form_submit_value'         => __ 'Save');
+    $self->stash ('form_preview'              => __ 'Preview');
+    $self->stash ('form_delete_confirm'       => __ 'Do you really want to delete this page?');
+    $self->stash ('form_delete'               => __ 'Delete page');
+};
+
 get '/set_language'           => \&set_language;
 get '/set_language/:language' => \&set_language;
 
@@ -123,7 +155,11 @@ get '/sitemap' => sub {
     }
 
     return $self->render (
-        'buckets' => \@buckets,
+        'layout_title' => (__ 'Sitemap'),
+        'buckets'      => \@buckets,
+        'header'       => (__ 'Special pages'),
+        'special1'     => (__ 'Search'),
+        'special2'     => (__ 'Sitemap'),
     );
 };
 
@@ -146,7 +182,11 @@ get '/tags' => sub {
     }
 
     return $self->render (
-        'tags' => \%tags,
+        'layout_title' => (__ 'Tags'),
+        'tags'         => \%tags,
+        'header'       => (__ 'Special pages'),
+        'special1'     => (__ 'Search'),
+        'special2'     => (__ 'Sitemap'),
     );
 };
 
@@ -211,9 +251,12 @@ sub get_article {
             $log->debug ('index.md page does not exist');
             if (!create_index) {
                 return $self->render (
-                    'template' => 'internal_server_error',
-                    'action'   => 'opening or writing',
-                    'status'   => 500,
+                    'template'         => 'internal_server_error',
+                    'title'            => (__ 'ERROR 500'),
+                    'header'           => (__ 'Error'),
+                    'subheader'        => (__ "Error opening or writing the document you requested."),
+                    'status'           => 500,
+                    'link_search_text' => (__x  'Search for &ldquo;{title}&rdquo;', 'title' => $title),
                 );
             }
             $log->debug ('index page created');
@@ -227,15 +270,23 @@ sub get_article {
     $log->debug ("file is '$file'");
 
     return $self->render (
-        'template' => 'not_found',
+        'template'         => 'not_found',
+        'title'            => (__ 'Not Found - ERROR 404'),
+        'header'           => (__ 'Not found'),
+        'subheader'        => (__ 'Document you requested was not found.'),
+        'link_search_text' => (__x 'Search for &ldquo;{title}&rdquo;',  'title' => $title),
+        'link_edit_text'   => (__x 'Create page &ldquo;{title}&rdquo;', 'title' => $title),
     ) unless -e $file;
 
     open my $fd, '<', $file or do {
         $log->warn ("open: '$file': $!");
         return $self->render (
-            'template' => 'internal_server_error',
-            'action'   => 'opening',
-            'status'   => 500,
+            'template'         => 'internal_server_error',
+            'title'            => (__ 'ERROR 500'),
+            'header'           => (__ 'Error'),
+            'subheader'        => (__ "Error opening the document you requested."),
+            'status'           => 500,
+            'link_search_text' => (__x  'Search for &ldquo;{title}&rdquo;', 'title' => $title),
         );
     };
     my $contents; { local $/; $contents = <$fd>; }
@@ -274,11 +325,11 @@ sub edit_article {
 
         unless ($article_content) {
             return $self->render (
-                'errors'            => [ __ 'Page content can not be empty' ],
-                'template'          => 'edit_article',
-                'title'             => b (__ 'Edit page')->decode ('UTF-8'),
-                'article_content'   => $article_content,
-                'article_title'     => b ($article_title)->decode ('UTF-8'),
+                'errors'                    => [ __ 'Page content can not be empty' ],
+                'template'                  => 'edit_article',
+                'title'                     => b (__ 'Edit page')->decode ('UTF-8'),
+                'article_content'           => $article_content,
+                'article_title'             => b ($article_title)->decode ('UTF-8'),
             );
         }
 
@@ -301,11 +352,11 @@ sub edit_article {
 
         END:
         return $self->render (
-            'errors'            => [ @errors ],
-            'template'          => 'edit_article',
-            'title'             => b (__ 'Errors occured')->decode ('UTF-8'),
-            'article_content'   => $article_content,
-            'article_title'     => b ($article_title)->decode ('UTF-8'),
+            'errors'                    => [ @errors ],
+            'template'                  => 'edit_article',
+            'title'                     => b (__ 'Errors occured')->decode ('UTF-8'),
+            'article_content'           => $article_content,
+            'article_title'             => b ($article_title)->decode ('UTF-8'),
         );
     }
 
@@ -314,9 +365,12 @@ sub edit_article {
         open my $fd, '<', $file or do {
             $log->warn ("open: '$file': $!");
             return $self->render (
-                'template' => 'internal_server_error',
-                'action'   => 'opening',
-                'status'   => 500,
+                'template'         => 'internal_server_error',
+                'title'            => (__ 'ERROR 500'),
+                'header'           => (__ 'Error'),
+                'subheader'        => (__ "Error opening the document you requested."),
+                'status'           => 500,
+                'link_search_text' => (__x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title),
             );
         };
         { local $/; $contents = <$fd>; }
@@ -324,10 +378,10 @@ sub edit_article {
     }
 
     return $self->render (
-        'template'          => 'edit_article',
-        'title'             => b (__ 'Edit page')->decode ('UTF-8'),
-        'article_content'   => $contents,
-        'article_title'     => $article_title,
+        'template'                  => 'edit_article',
+        'title'                     => b (__ 'Edit page')->decode ('UTF-8'),
+        'article_content'           => $contents,
+        'article_title'             => $article_title,
     );
 }
 
@@ -346,7 +400,12 @@ sub delete_article {
     $log->debug ("file is '$file'");
 
     return $self->render (
-        'template' => 'not_found',
+        'template'         => 'not_found',
+        'title'            => (__ 'Not Found - ERROR 404'),
+        'header'           => (__ 'Not found'),
+        'subheader'        => (__ 'Document you requested was not found.'),
+        'link_search_text' => (__x 'Search for &ldquo;{title}&rdquo;',  'title' => $title),
+        'link_edit_text'   => (__x 'Create page &ldquo;{title}&rdquo;', 'title' => $title),
     ) unless -e $file;
 
     if (unlink $file) {
@@ -356,9 +415,12 @@ sub delete_article {
     } else {
         $log->warn ("unlink: '$file': $!");
         return $self->render (
-            'template' => 'internal_server_error',
-            'action'   => 'deleting',
-            'status'   => 500,
+            'template'         => 'internal_server_error',
+            'title'            => (__ 'ERROR 500'),
+            'header'           => (__ 'Error'),
+            'subheader'        => (__ "Error deleting the document you requested."),
+            'status'           => 500,
+            'link_search_text' => (__x  'Search for &ldquo;{title}&rdquo;', 'title' => $title),
         );
     }
 }
@@ -421,6 +483,7 @@ sub search {
     return $self->render (
         'template'         => 'search',
         'query'            => $query,
+        'submit_value'     => (__ 'Find'),
         'rows'             => $rows,
         'title'            => b ($title)->decode ('UTF-8'),
     );
@@ -449,7 +512,7 @@ __DATA__
 
 
 @@ sitemap.html.ep
-% layout 'default', 'title' => __ 'Sitemap';
+% layout 'default', 'title' => $layout_title;
 % for my $bucket (@$buckets) {
 <h4><%= $bucket->{'header'} %></h4>
 <ul>
@@ -458,15 +521,15 @@ __DATA__
 %     }
 </ul>
 % }
-<h2><%= __ 'Special pages' %></h2>
+<h2><%= $header %></h2>
 <ul>
-<li><a href="<%= url_for '/search'  %>"><%= __ 'Search' %></a></li>
-<li><a href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
+<li><a href="<%= url_for '/search'  %>"><%= $special1 %></a></li>
+<li><a href="<%= url_for '/sitemap' %>"><%= $special2 %></a></li>
 </ul>
 
 
 @@ tags.html.ep
-% layout 'default', 'title' => __ 'Tags';
+% layout 'default', 'title' => $layout_title;
 <ul>
 % for my $tag (sort keys %$tags) {
     <li><%= $tag %>:
@@ -476,10 +539,10 @@ __DATA__
     </li>
 % }
 </ul>
-<h2><%= __ 'Special pages' %></h2>
+<h2><%= $header %></h2>
 <ul>
-<li><a href="<%= url_for '/search'  %>"><%= __ 'Search' %></a></li>
-<li><a href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
+<li><a href="<%= url_for '/search'  %>"><%= $special1 %></a></li>
+<li><a href="<%= url_for '/sitemap' %>"><%= $special2 %></a></li>
 </ul>
 
 
@@ -487,7 +550,7 @@ __DATA__
 % layout 'default';
 <form action="<%= url_for '/search' %>">
 <input type="text" name="query" value="<%= $query %>">
-<input type="submit" value="<%= __ 'Find' %>">
+<input type="submit" value="<%= $submit_value %>">
 </form>
 <ol>
 % for my $row (@$rows) {
@@ -499,23 +562,21 @@ __DATA__
 
 @@ not_found.html.ep
 % layout 'error';
-% stash 'title' => __ 'Not Found - ERROR 404';
-<h1><%= __ 'Not found' %></h1><p><%= __ 'Document you requested was not found.' %></p>
+<h1><%= $header %></h1><p><%= $subheader %></p>
 <ul>
 % my $article_title = param 'title';
-<li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
-<li><a href="<%= url_for "/edit/$article_title" %>"><%== __x 'Create page &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
+<li><a href="<%= url_for "/search/$article_title" %>"><%== $link_search_text %></a></li>
+<li><a href="<%= url_for "/edit/$article_title"   %>"><%== $link_edit_text   %></a></li>
 </ul>
 
 
 @@ internal_server_error.html.ep
 % layout 'error';
-% stash 'title' => __ 'ERROR 500';
 % my $action = stash 'action';
-<h1><%= __ 'Error' %></h1><p><%= __ "Error $action the document you requested." %></p>
+<h1><%= $header %></h1><p><%= $subheader %></p>
 <ul>
 % my $article_title = param 'title';
-<li><a href="<%= url_for "/search/$article_title" %>"><%== __x  'Search for &ldquo;{title}&rdquo;', 'title' => $article_title %></a></li>
+<li><a href="<%= url_for "/search/$article_title" %>"><%== $link_search_text %></a></li>
 </ul>
 
 
@@ -609,26 +670,26 @@ button:hover{border-color:#69c}
 
 <form method="post" action="<%= url_for "/edit/$article_title" %>">
 <dl>
-<dt><%= __ 'Title' %></dt>
+<dt><%= $form_dt_title %></dt>
 <dd><input type="text" name="title" value="<%= $article_title %>" readonly=""></dd>
-<dt><%= __ 'Content' %></dt>
+<dt><%= $form_dt_content %></dt>
 <dd><span id="toolbar">
-<button type="button" id="btn_bold" title="<%= __ 'Bold (Ctrl+B)' %>"><%= __ 'Bold' %></button>
-<button type="button" id="btn_italic" title="<%= __ 'Italic (Ctrl+I)' %>"><%= __ 'Italic' %></button>
-<button type="button" id="btn_h1" title="<%= __ 'Header 1' %>"><%= __ 'Header 1' %></button>
-<button type="button" id="btn_h2" title="<%= __ 'Header 2' %>"><%= __ 'Header 2' %></button>
-<button type="button" id="btn_h3" title="<%= __ 'Header 3' %>"><%= __ 'Header 3' %></button>
-<button type="button" id="btn_ul" title="<%= __ 'Unordered list item' %>"><%= __ 'Unordered list item' %></button>
-<button type="button" id="btn_ol" title="<%= __ 'Ordered list item' %>"><%= __ 'Ordered list item' %></button>
+<button type="button" id="btn_bold"   title="<%= $form_toolbar_bold_title   %>"><%= $form_toolbar_bold_text   %></button>
+<button type="button" id="btn_italic" title="<%= $form_toolbar_italic_title %>"><%= $form_toolbar_italic_text %></button>
+<button type="button" id="btn_h1"     title="<%= $form_toolbar_h1_title     %>"><%= $form_toolbar_h1_text     %></button>
+<button type="button" id="btn_h2"     title="<%= $form_toolbar_h2_title     %>"><%= $form_toolbar_h2_text     %></button>
+<button type="button" id="btn_h3"     title="<%= $form_toolbar_h3_title     %>"><%= $form_toolbar_h3_text     %></button>
+<button type="button" id="btn_ul"     title="<%= $form_toolbar_ul_title     %>"><%= $form_toolbar_ul_text     %></button>
+<button type="button" id="btn_ol"     title="<%= $form_toolbar_ol_title     %>"><%= $form_toolbar_ol_text     %></button>
 </span>
 <br><textarea name="article" id="article"><%= $article_content %></textarea>
-<br><a href="https://daringfireball.net/projects/markdown/syntax"><%= __ 'Markdown syntax' %></a>
+<br><a href="https://daringfireball.net/projects/markdown/syntax"><%= $form_md_syntax %></a>
 </dd>
 </dl>
-<input type="submit" value="<%= __ 'Save' %>">
-<a href="#" id="preview_link"><%= __ 'Preview' %></a>
+<input type="submit" value="<%= $form_submit_value %>">
+<a href="#" id="preview_link"><%= $form_preview %></a>
     <a href="<%= url_for "/delete/$article_title" %>" id="delete_link"
-    onclick="return confirm('<%= __ 'Do you really want to delete this page?' %>')"><%= __ 'Delete page' %></a>
+    onclick="return confirm('<%= $form_delete_confirm %>')"><%= $form_delete %></a>
 </form>
 <div id="preview_area"></div>
 
@@ -637,7 +698,7 @@ button:hover{border-color:#69c}
 <!DOCTYPE html>
 <html>
     <head>
-        <title><%= $title || __ 'ERROR' %></title>
+        <title><%= $title || $layout_error_deftitle %></title>
         <style type="text/css">body{background:#fec;color:#000}h1{color:#900}</style>
         <link rel="stylesheet" type="text/css" href="/style.css">
     </head>
@@ -652,7 +713,7 @@ button:hover{border-color:#69c}
 % use Mojo::ByteStream 'b';
 <!DOCTYPE html>
 <html>
-    <head><title><%= $title || __ 'Welcome'%></title>
+    <head><title><%= $title || $layout_default_deftitle %></title>
     <link rel="shortcut icon" href="<%= url_for '/favicon.ico' %>">
     <link rel="stylesheet" type="text/css" href="/style.css">
     </head>
@@ -670,11 +731,11 @@ button:hover{border-color:#69c}
 
 @@ menu.html.ep
 <ul id="menu">
-    <li><a href="<%= url_for '/index.md' %>"><%= __ 'Main page' %></a></li>
-    <li><a href="<%= url_for '/sitemap' %>"><%= __ 'Sitemap' %></a></li>
-    <li><a href="<%= url_for '/tags' %>"><%= __ 'Tags' %></a></li>
-    <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>">Edit</a></li><% } %>
-    <li><form action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= __ 'Language' %></option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option></select></form></li>
+    <li><a href="<%= url_for '/index.md' %>"><%= $menu_index   %></a></li>
+    <li><a href="<%= url_for '/sitemap'  %>"><%= $menu_sitemap %></a></li>
+    <li><a href="<%= url_for '/tags'     %>"><%= $menu_tags    %></a></li>
+    <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>"><%= $menu_edit %></a></li><% } %>
+    <li><form action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= $menu_language %></option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option></select></form></li>
     <li><form action="<%= url_for '/search' %>"><input id="search" type="text" name="query"></form></li>
-    <li><form action="<%= url_for '/edit' %>">  <input id="edit"   type="text" name="title"></form></li>
+    <li><form action="<%= url_for '/edit'   %>"><input id="edit"   type="text" name="title"></form></li>
 </ul>

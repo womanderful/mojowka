@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-31 10:07+0200\n"
+"POT-Creation-Date: 2020-08-01 23:28+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,121 +18,227 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 
+#: ../mojowka-didi.tmp:83
+msgid "Main page"
+msgstr ""
+
+#: ../mojowka-didi.tmp:84 ../mojowka-didi.tmp:161 ../mojowka-didi.tmp:165
+#: ../mojowka-didi.tmp:192
+msgid "Sitemap"
+msgstr ""
+
+#: ../mojowka-didi.tmp:85 ../mojowka-didi.tmp:188
+msgid "Tags"
+msgstr ""
+
+#: ../mojowka-didi.tmp:86
+msgid "Edit"
+msgstr ""
+
+#: ../mojowka-didi.tmp:87
+msgid "Language"
+msgstr ""
+
+#: ../mojowka-didi.tmp:88
+msgid "ERROR"
+msgstr ""
+
+#: ../mojowka-didi.tmp:89
+msgid "Welcome"
+msgstr ""
+
+#: ../mojowka-didi.tmp:90
+msgid "Title"
+msgstr ""
+
+#: ../mojowka-didi.tmp:91
+msgid "Content"
+msgstr ""
+
 #: ../mojowka-didi.tmp:92
-msgid "Recent"
+msgid "Bold (Ctrl+B)"
 msgstr ""
 
 #: ../mojowka-didi.tmp:93
-msgid "Older than 7 days"
+msgid "Bold"
 msgstr ""
 
 #: ../mojowka-didi.tmp:94
-msgid "Older than 1 month"
+msgid "Italic (Ctrl+I)"
 msgstr ""
 
 #: ../mojowka-didi.tmp:95
+msgid "Italic"
+msgstr ""
+
+#: ../mojowka-didi.tmp:96 ../mojowka-didi.tmp:97
+msgid "Header 1"
+msgstr ""
+
+#: ../mojowka-didi.tmp:98 ../mojowka-didi.tmp:99
+msgid "Header 2"
+msgstr ""
+
+#: ../mojowka-didi.tmp:100 ../mojowka-didi.tmp:101
+msgid "Header 3"
+msgstr ""
+
+#: ../mojowka-didi.tmp:102 ../mojowka-didi.tmp:103
+msgid "Unordered list item"
+msgstr ""
+
+#: ../mojowka-didi.tmp:104 ../mojowka-didi.tmp:105
+msgid "Ordered list item"
+msgstr ""
+
+#: ../mojowka-didi.tmp:106
+msgid "Markdown syntax"
+msgstr ""
+
+#: ../mojowka-didi.tmp:107
+msgid "Save"
+msgstr ""
+
+#: ../mojowka-didi.tmp:108
+msgid "Preview"
+msgstr ""
+
+#: ../mojowka-didi.tmp:109
+msgid "Do you really want to delete this page?"
+msgstr ""
+
+#: ../mojowka-didi.tmp:110
+msgid "Delete page"
+msgstr ""
+
+#: ../mojowka-didi.tmp:127
+msgid "Recent"
+msgstr ""
+
+#: ../mojowka-didi.tmp:128
+msgid "Older than 7 days"
+msgstr ""
+
+#: ../mojowka-didi.tmp:129
+msgid "Older than 1 month"
+msgstr ""
+
+#: ../mojowka-didi.tmp:130
 msgid "Older than 3 months"
 msgstr ""
 
-#: ../mojowka-didi.tmp:96
+#: ../mojowka-didi.tmp:131
 msgid "Older than 6 months"
 msgstr ""
 
-#: ../mojowka-didi.tmp:97
+#: ../mojowka-didi.tmp:132
 msgid "Older than 1 year"
 msgstr ""
 
-#: ../mojowka-didi.tmp:98
+#: ../mojowka-didi.tmp:133
 msgid "Older than 2 years"
 msgstr ""
 
-#: ../mojowka-didi.tmp:99
+#: ../mojowka-didi.tmp:134
 msgid "Older than 5 years"
 msgstr ""
 
-#: ../mojowka-didi.tmp:254
-msgid "Page content can not be empty"
+#: ../mojowka-didi.tmp:163 ../mojowka-didi.tmp:190
+msgid "Special pages"
 msgstr ""
 
-#: ../mojowka-didi.tmp:256 ../mojowka-didi.tmp:305
-msgid "Edit page"
-msgstr ""
-
-#: ../mojowka-didi.tmp:264
-msgid "Can not save: error opening article"
-msgstr ""
-
-#: ../mojowka-didi.tmp:271
-msgid "Can not save: error writing article"
-msgstr ""
-
-#: ../mojowka-didi.tmp:276
-msgid "Changes were saved"
-msgstr ""
-
-#: ../mojowka-didi.tmp:283
-msgid "Errors occured"
-msgstr ""
-
-#: ../mojowka-didi.tmp:331
-msgid "Page was deleted"
-msgstr ""
-
-#: ../mojowka-didi.tmp:352 ../mojowka-didi.tmp:440
+#: ../mojowka-didi.tmp:164 ../mojowka-didi.tmp:191 ../mojowka-didi.tmp:440
 msgid "Search"
 msgstr ""
 
-#: ../mojowka-didi.tmp:362
+#: ../mojowka-didi.tmp:258 ../mojowka-didi.tmp:288 ../mojowka-didi.tmp:372
+#: ../mojowka-didi.tmp:422
+msgid "ERROR 500"
+msgstr ""
+
+#: ../mojowka-didi.tmp:259 ../mojowka-didi.tmp:289 ../mojowka-didi.tmp:373
+#: ../mojowka-didi.tmp:423
+msgid "Error"
+msgstr ""
+
+#: ../mojowka-didi.tmp:260
+msgid "Error opening or writing the document you requested."
+msgstr ""
+
+#: ../mojowka-didi.tmp:262 ../mojowka-didi.tmp:280 ../mojowka-didi.tmp:292
+#: ../mojowka-didi.tmp:376 ../mojowka-didi.tmp:410 ../mojowka-didi.tmp:426
+#, perl-brace-format
+msgid "Search for &ldquo;{title}&rdquo;"
+msgstr ""
+
+#: ../mojowka-didi.tmp:277 ../mojowka-didi.tmp:407
+msgid "Not Found - ERROR 404"
+msgstr ""
+
+#: ../mojowka-didi.tmp:278 ../mojowka-didi.tmp:408
+msgid "Not found"
+msgstr ""
+
+#: ../mojowka-didi.tmp:279 ../mojowka-didi.tmp:409
+msgid "Document you requested was not found."
+msgstr ""
+
+#: ../mojowka-didi.tmp:281 ../mojowka-didi.tmp:411
+#, perl-brace-format
+msgid "Create page &ldquo;{title}&rdquo;"
+msgstr ""
+
+#: ../mojowka-didi.tmp:290 ../mojowka-didi.tmp:374
+msgid "Error opening the document you requested."
+msgstr ""
+
+#: ../mojowka-didi.tmp:331
+msgid "Page content can not be empty"
+msgstr ""
+
+#: ../mojowka-didi.tmp:333 ../mojowka-didi.tmp:385
+msgid "Edit page"
+msgstr ""
+
+#: ../mojowka-didi.tmp:341
+msgid "Can not save: error opening article"
+msgstr ""
+
+#: ../mojowka-didi.tmp:348
+msgid "Can not save: error writing article"
+msgstr ""
+
+#: ../mojowka-didi.tmp:353
+msgid "Changes were saved"
+msgstr ""
+
+#: ../mojowka-didi.tmp:360
+msgid "Errors occured"
+msgstr ""
+
+#: ../mojowka-didi.tmp:416
+msgid "Page was deleted"
+msgstr ""
+
+#: ../mojowka-didi.tmp:424
+msgid "Error deleting the document you requested."
+msgstr ""
+
+#: ../mojowka-didi.tmp:450
 msgid "Invalid regular expression"
 msgstr ""
 
-#: ../mojowka-didi.tmp:383
+#: ../mojowka-didi.tmp:471
 msgid "Exact matching found"
 msgstr ""
 
-#: ../mojowka-didi.tmp:388
+#: ../mojowka-didi.tmp:476
 #, perl-brace-format
 msgid "Found {count} page"
 msgid_plural "Found {count} pages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ../mojowka-didi.tmp:429 ../mojowka-didi.tmp:441
-msgid "Sitemap"
-msgstr ""
-
-#: ../mojowka-didi.tmp:567
-msgid "Bold (Ctrl+B)"
-msgstr ""
-
-#: ../mojowka-didi.tmp:568
-msgid "Italic (Ctrl+I)"
-msgstr ""
-
-#: ../mojowka-didi.tmp:569
-msgid "Header 1"
-msgstr ""
-
-#: ../mojowka-didi.tmp:570
-msgid "Header 2"
-msgstr ""
-
-#: ../mojowka-didi.tmp:571
-msgid "Header 3"
-msgstr ""
-
-#: ../mojowka-didi.tmp:572
-msgid "Unordered list item"
-msgstr ""
-
-#: ../mojowka-didi.tmp:573
-msgid "Ordered list item"
-msgstr ""
-
-#: ../mojowka-didi.tmp:579
-msgid "Save"
-msgstr ""
-
-#: ../mojowka-didi.tmp:606
-msgid "Welcome"
+#: ../mojowka-didi.tmp:489
+msgid "Find"
 msgstr ""
