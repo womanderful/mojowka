@@ -169,7 +169,7 @@ get '/tags' => sub {
     my %tags;
 
     foreach my $f (glob "$DATADIR/*") {
-        my $bn = basename $f;
+        my $bn = b (basename $f)->decode ('UTF-8');
         open my $fd, '<', $f or do { $log->warn ("open: '$f': $!"); next; };
         while (my $line = <$fd>) {
             chomp $line;
@@ -329,7 +329,7 @@ sub edit_article {
                 'template'                  => 'edit_article',
                 'title'                     => b (__ 'Edit page')->decode ('UTF-8'),
                 'article_content'           => $article_content,
-                'article_title'             => b ($article_title)->decode ('UTF-8'),
+                'article_title'             => $article_title,
             );
         }
 
@@ -356,7 +356,7 @@ sub edit_article {
             'template'                  => 'edit_article',
             'title'                     => b (__ 'Errors occured')->decode ('UTF-8'),
             'article_content'           => $article_content,
-            'article_title'             => b ($article_title)->decode ('UTF-8'),
+            'article_title'             => $article_title,
         );
     }
 
