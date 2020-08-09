@@ -77,6 +77,7 @@ app->secrets (['mojoWka-didi']);
 
 under sub {
     my $self = shift;
+    $self->stash ('article_title'             => '');
     $self->stash ('menu_index'                => __ 'Main page');
     $self->stash ('menu_sitemap'              => __ 'Sitemap');
     $self->stash ('menu_tags'                 => __ 'Tags');
@@ -194,6 +195,32 @@ get '/search/:query'                   => \&search;
 get '/search'                          => \&search;
 any '/edit/#title'                     => \&edit_article;
 any '/edit'                            => \&edit_article;
+
+post '/rename' => sub {
+    my $self = shift;
+    my $src = $self->param ('src');
+    my $dst = $self->param ('dst');
+
+    if (!$src or !$dst) {
+        $self->flash ('message' => __ 'Source and/or destination are empty');
+        return $self->redirect_to ("/edit/$src");
+    }
+    $log->debug ("renaming '$src to '$dst'");
+    if (-f "$DATADIR/$dst") {
+        $log->debug ("dst '$dst' already exists");
+        $self->flash ('message' => __ 'Destination already exists');
+        return $self->redirect_to ("/edit/$src");
+    }
+    if (!rename "$DATADIR/$src", "$DATADIR/$dst") {
+        $log->warn ("rename: '$src' to '$dst': $!");
+        $self->flash ('message' => __ 'Error renaming article');
+        return $self->redirect_to ("/edit/$src");
+    }
+
+    $self->flash ('message' => __ 'Article successfully renamed');
+    return $self->redirect_to ("/$dst");
+};
+
 any '/delete/#title'                   => \&delete_article;
 get '/#title'                          => \&get_article;
 get '/'                                => \&get_article;
@@ -330,6 +357,7 @@ sub edit_article {
                 'title'                     => b (__ 'Edit page')->decode ('UTF-8'),
                 'article_content'           => $article_content,
                 'article_title'             => $article_title,
+                'show_rename' => 1,
             );
         }
 
@@ -357,6 +385,7 @@ sub edit_article {
             'title'                     => b (__ 'Errors occured')->decode ('UTF-8'),
             'article_content'           => $article_content,
             'article_title'             => $article_title,
+            'show_rename' => 1,
         );
     }
 
@@ -382,6 +411,7 @@ sub edit_article {
         'title'                     => b (__ 'Edit page')->decode ('UTF-8'),
         'article_content'           => $contents,
         'article_title'             => $article_title,
+        'show_rename' => 1,
     );
 }
 
@@ -736,6 +766,7 @@ button:hover{border-color:#69c}
     <li><a href="<%= url_for '/tags'     %>"><%= $menu_tags    %></a></li>
     <% if (stash 'show_edit') { %><li><a href="<%= url_for "/edit/$title" %>"><%= $menu_edit %></a></li><% } %>
     <li><form action="<%= url_for '/set_language' %>" onchange="this.submit()"><select name="language"><option value=""><%= $menu_language %></option><option value="en">English</option><option value="ru">Русский</option><option value="es">Español</option></select></form></li>
+    <% if (stash 'show_rename') { %><li><form method="post" action="<%= url_for '/rename' %>"><input type="hidden" name="src" value="<%= $article_title %>"><input id="rename" type="text" name="dst"></form></li><% } %>
     <li><form action="<%= url_for '/search' %>"><input id="search" type="text" name="query"></form></li>
     <li><form action="<%= url_for '/edit'   %>"><input id="edit"   type="text" name="title"></form></li>
 </ul>
