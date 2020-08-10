@@ -324,7 +324,10 @@ sub get_article {
     close $fd;
 
     if ($title !~ /\.md$/) {
-        ## wrap the contents between <pre></pre> markers so we get a text/plain output
+        ## minimally quote any possible HTML and wrap the contents between <pre></pre> markers so we get a text/plain output
+        $contents =~ s/&/&amp;/g;
+        $contents =~ s/</&lt;/g;
+        $contents =~ s/>/&gt;/g;
         $contents = "<pre>\n$contents</pre>\n";
     }
     $self->render (
