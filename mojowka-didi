@@ -171,20 +171,24 @@ get '/tags' => sub {
 
     foreach my $f (glob "$DATADIR/*") {
         my $bn = b (basename $f)->decode ('UTF-8');
+        my $has_any_tags = 0;
         open my $fd, '<', $f or do { $log->warn ("open: '$f': $!"); next; };
         while (my $line = <$fd>) {
             chomp $line;
             next if $line !~ /^\s*:([a-z0-9:_-]*):\s*$/;
             for my $t (split /:/, $1) {
                 $tags{$t}{$bn} = undef;
+                $has_any_tags = 1;
             }
         }
         close $fd;
+        $has_any_tags or $tags{':untagged'}{$bn} = undef;
     }
 
     return $self->render (
         'layout_title' => (__ 'Tags'),
         'tags'         => \%tags,
+        'untagged'     => (__ 'Untagged'),
         'header'       => (__ 'Special pages'),
         'special1'     => (__ 'Search'),
         'special2'     => (__ 'Sitemap'),
@@ -561,13 +565,19 @@ __DATA__
 @@ tags.html.ep
 % layout 'default', 'title' => $layout_title;
 <ul>
-% for my $tag (sort keys %$tags) {
+% for my $tag (sort grep { ':untagged' ne $_ } keys %$tags) {
     <li><%= $tag %>:
 %     for my $link (sort keys %{ $tags->{$tag} }) {
         <a href="<%= url_for "/$link" %>"><%= $link %></a>
 %     }
     </li>
 % }
+</ul>
+<h2><%= $untagged %></h2>
+<ul>
+%     for my $link (sort keys %{ $tags->{':untagged'} }) {
+    <li><a href="<%= url_for "/$link" %>"><%= $link %></a></li>
+%     }
 </ul>
 <h2><%= $header %></h2>
 <ul>

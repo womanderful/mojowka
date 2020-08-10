@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 0.0.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-01 23:28+0200\n"
+"POT-Creation-Date: 2020-08-10 14:07+0200\n"
 "PO-Revision-Date: 2013-05-09 02:00+0600\n"
 "Last-Translator: Alexander Sapozhnikov <shoorick@cpan.org>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,227 +18,248 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 
-#: ../mojowka-didi.tmp:83
+#: ../mojowka-didi.tmp:84
 msgid "Main page"
 msgstr "Главная страница"
 
-#: ../mojowka-didi.tmp:84 ../mojowka-didi.tmp:161 ../mojowka-didi.tmp:165
-#: ../mojowka-didi.tmp:192
+#: ../mojowka-didi.tmp:85 ../mojowka-didi.tmp:162 ../mojowka-didi.tmp:166
+#: ../mojowka-didi.tmp:197
 msgid "Sitemap"
 msgstr "Карта сайта"
 
-#: ../mojowka-didi.tmp:85 ../mojowka-didi.tmp:188
+#: ../mojowka-didi.tmp:86 ../mojowka-didi.tmp:192
 msgid "Tags"
 msgstr "Метки"
 
-#: ../mojowka-didi.tmp:86
+#: ../mojowka-didi.tmp:87
 #, fuzzy
 msgid "Edit"
 msgstr "Редактирование"
 
-#: ../mojowka-didi.tmp:87
+#: ../mojowka-didi.tmp:88
 msgid "Language"
 msgstr "Язык"
 
-#: ../mojowka-didi.tmp:88
+#: ../mojowka-didi.tmp:89
 msgid "ERROR"
 msgstr "ОШИБКА"
 
-#: ../mojowka-didi.tmp:89
+#: ../mojowka-didi.tmp:90
 msgid "Welcome"
 msgstr "Добро пожаловать"
 
-#: ../mojowka-didi.tmp:90
+#: ../mojowka-didi.tmp:91
 msgid "Title"
 msgstr "Заголовок"
 
-#: ../mojowka-didi.tmp:91
+#: ../mojowka-didi.tmp:92
 msgid "Content"
 msgstr "Содержимое"
 
-#: ../mojowka-didi.tmp:92
+#: ../mojowka-didi.tmp:93
 msgid "Bold (Ctrl+B)"
 msgstr "Жирный (Ctrl+B)"
 
-#: ../mojowka-didi.tmp:93
+#: ../mojowka-didi.tmp:94
 msgid "Bold"
 msgstr "Жирный"
 
-#: ../mojowka-didi.tmp:94
+#: ../mojowka-didi.tmp:95
 msgid "Italic (Ctrl+I)"
 msgstr "Курсив (Ctrl+I)"
 
-#: ../mojowka-didi.tmp:95
+#: ../mojowka-didi.tmp:96
 msgid "Italic"
 msgstr "Курсив"
 
-#: ../mojowka-didi.tmp:96 ../mojowka-didi.tmp:97
+#: ../mojowka-didi.tmp:97 ../mojowka-didi.tmp:98
 msgid "Header 1"
 msgstr "Заголовок 1"
 
-#: ../mojowka-didi.tmp:98 ../mojowka-didi.tmp:99
+#: ../mojowka-didi.tmp:99 ../mojowka-didi.tmp:100
 msgid "Header 2"
 msgstr "Заголовок 2"
 
-#: ../mojowka-didi.tmp:100 ../mojowka-didi.tmp:101
+#: ../mojowka-didi.tmp:101 ../mojowka-didi.tmp:102
 msgid "Header 3"
 msgstr "Заголовок 3"
 
-#: ../mojowka-didi.tmp:102 ../mojowka-didi.tmp:103
+#: ../mojowka-didi.tmp:103 ../mojowka-didi.tmp:104
 msgid "Unordered list item"
 msgstr "Элемент ненумерованного списка"
 
-#: ../mojowka-didi.tmp:104 ../mojowka-didi.tmp:105
+#: ../mojowka-didi.tmp:105 ../mojowka-didi.tmp:106
 msgid "Ordered list item"
 msgstr "Элемент нумерованного списка"
 
-#: ../mojowka-didi.tmp:106
+#: ../mojowka-didi.tmp:107
 msgid "Markdown syntax"
 msgstr ""
 
-#: ../mojowka-didi.tmp:107
+#: ../mojowka-didi.tmp:108
 msgid "Save"
 msgstr "Сохранить"
 
-#: ../mojowka-didi.tmp:108
+#: ../mojowka-didi.tmp:109
 msgid "Preview"
 msgstr "Просмотр"
 
-#: ../mojowka-didi.tmp:109
+#: ../mojowka-didi.tmp:110
 msgid "Do you really want to delete this page?"
 msgstr "Вы действительно хотите удалить страницу?"
 
-#: ../mojowka-didi.tmp:110
+#: ../mojowka-didi.tmp:111
 msgid "Delete page"
 msgstr "Удалить страницу"
 
-#: ../mojowka-didi.tmp:127
+#: ../mojowka-didi.tmp:128
 msgid "Recent"
 msgstr ""
 
-#: ../mojowka-didi.tmp:128
+#: ../mojowka-didi.tmp:129
 msgid "Older than 7 days"
 msgstr ""
 
-#: ../mojowka-didi.tmp:129
+#: ../mojowka-didi.tmp:130
 msgid "Older than 1 month"
 msgstr ""
 
-#: ../mojowka-didi.tmp:130
+#: ../mojowka-didi.tmp:131
 msgid "Older than 3 months"
 msgstr ""
 
-#: ../mojowka-didi.tmp:131
+#: ../mojowka-didi.tmp:132
 msgid "Older than 6 months"
 msgstr ""
 
-#: ../mojowka-didi.tmp:132
+#: ../mojowka-didi.tmp:133
 msgid "Older than 1 year"
 msgstr ""
 
-#: ../mojowka-didi.tmp:133
+#: ../mojowka-didi.tmp:134
 msgid "Older than 2 years"
 msgstr ""
 
-#: ../mojowka-didi.tmp:134
+#: ../mojowka-didi.tmp:135
 msgid "Older than 5 years"
 msgstr ""
 
-#: ../mojowka-didi.tmp:163 ../mojowka-didi.tmp:190
+#: ../mojowka-didi.tmp:164 ../mojowka-didi.tmp:195
 msgid "Special pages"
 msgstr "Специальные страницы"
 
-#: ../mojowka-didi.tmp:164 ../mojowka-didi.tmp:191 ../mojowka-didi.tmp:440
+#: ../mojowka-didi.tmp:165 ../mojowka-didi.tmp:196 ../mojowka-didi.tmp:474
 msgid "Search"
 msgstr "Поиск"
 
-#: ../mojowka-didi.tmp:258 ../mojowka-didi.tmp:288 ../mojowka-didi.tmp:372
-#: ../mojowka-didi.tmp:422
+#: ../mojowka-didi.tmp:194
+msgid "Untagged"
+msgstr ""
+
+#: ../mojowka-didi.tmp:212
+msgid "Source and/or destination are empty"
+msgstr ""
+
+#: ../mojowka-didi.tmp:218
+msgid "Destination already exists"
+msgstr ""
+
+#: ../mojowka-didi.tmp:223
+#, fuzzy
+msgid "Error renaming article"
+msgstr "Не могу сохранить"
+
+#: ../mojowka-didi.tmp:227
+msgid "Article successfully renamed"
+msgstr ""
+
+#: ../mojowka-didi.tmp:289 ../mojowka-didi.tmp:319 ../mojowka-didi.tmp:405
+#: ../mojowka-didi.tmp:456
 #, fuzzy
 msgid "ERROR 500"
 msgstr "ОШИБКА"
 
-#: ../mojowka-didi.tmp:259 ../mojowka-didi.tmp:289 ../mojowka-didi.tmp:373
-#: ../mojowka-didi.tmp:423
+#: ../mojowka-didi.tmp:290 ../mojowka-didi.tmp:320 ../mojowka-didi.tmp:406
+#: ../mojowka-didi.tmp:457
 msgid "Error"
 msgstr ""
 
-#: ../mojowka-didi.tmp:260
+#: ../mojowka-didi.tmp:291
 msgid "Error opening or writing the document you requested."
 msgstr ""
 
-#: ../mojowka-didi.tmp:262 ../mojowka-didi.tmp:280 ../mojowka-didi.tmp:292
-#: ../mojowka-didi.tmp:376 ../mojowka-didi.tmp:410 ../mojowka-didi.tmp:426
+#: ../mojowka-didi.tmp:293 ../mojowka-didi.tmp:311 ../mojowka-didi.tmp:323
+#: ../mojowka-didi.tmp:409 ../mojowka-didi.tmp:444 ../mojowka-didi.tmp:460
 #, perl-brace-format
 msgid "Search for &ldquo;{title}&rdquo;"
 msgstr "Искать «{title}»"
 
-#: ../mojowka-didi.tmp:277 ../mojowka-didi.tmp:407
+#: ../mojowka-didi.tmp:308 ../mojowka-didi.tmp:441
 msgid "Not Found - ERROR 404"
 msgstr "Не найдено - ОШИБКА 404"
 
-#: ../mojowka-didi.tmp:278 ../mojowka-didi.tmp:408
+#: ../mojowka-didi.tmp:309 ../mojowka-didi.tmp:442
 msgid "Not found"
 msgstr "Не найдено"
 
-#: ../mojowka-didi.tmp:279 ../mojowka-didi.tmp:409
+#: ../mojowka-didi.tmp:310 ../mojowka-didi.tmp:443
 msgid "Document you requested was not found."
 msgstr "Запрошенный документ не найден."
 
-#: ../mojowka-didi.tmp:281 ../mojowka-didi.tmp:411
+#: ../mojowka-didi.tmp:312 ../mojowka-didi.tmp:445
 #, perl-brace-format
 msgid "Create page &ldquo;{title}&rdquo;"
 msgstr "Создать страницу «{title}»"
 
-#: ../mojowka-didi.tmp:290 ../mojowka-didi.tmp:374
+#: ../mojowka-didi.tmp:321 ../mojowka-didi.tmp:407
 msgid "Error opening the document you requested."
 msgstr ""
 
-#: ../mojowka-didi.tmp:331
+#: ../mojowka-didi.tmp:362
 msgid "Page content can not be empty"
 msgstr "Содержимое страницы не может быть пустым"
 
-#: ../mojowka-didi.tmp:333 ../mojowka-didi.tmp:385
+#: ../mojowka-didi.tmp:364 ../mojowka-didi.tmp:418
 #, fuzzy
 msgid "Edit page"
 msgstr "Изменить эту страницу"
 
-#: ../mojowka-didi.tmp:341
+#: ../mojowka-didi.tmp:373
 #, fuzzy
 msgid "Can not save: error opening article"
 msgstr "Не могу сохранить"
 
-#: ../mojowka-didi.tmp:348
+#: ../mojowka-didi.tmp:380
 #, fuzzy
 msgid "Can not save: error writing article"
 msgstr "Не могу сохранить"
 
-#: ../mojowka-didi.tmp:353
+#: ../mojowka-didi.tmp:385
 #, fuzzy
 msgid "Changes were saved"
 msgstr "Изменения сохранены"
 
-#: ../mojowka-didi.tmp:360
+#: ../mojowka-didi.tmp:392
 msgid "Errors occured"
 msgstr "Произошли ошибки"
 
-#: ../mojowka-didi.tmp:416
+#: ../mojowka-didi.tmp:450
 msgid "Page was deleted"
 msgstr "Страница удалена"
 
-#: ../mojowka-didi.tmp:424
+#: ../mojowka-didi.tmp:458
 msgid "Error deleting the document you requested."
 msgstr ""
 
-#: ../mojowka-didi.tmp:450
+#: ../mojowka-didi.tmp:484
 msgid "Invalid regular expression"
 msgstr ""
 
-#: ../mojowka-didi.tmp:471
+#: ../mojowka-didi.tmp:505
 msgid "Exact matching found"
 msgstr "Найдено точное соответствие"
 
-#: ../mojowka-didi.tmp:476
+#: ../mojowka-didi.tmp:510
 #, perl-brace-format
 msgid "Found {count} page"
 msgid_plural "Found {count} pages"
@@ -246,7 +267,7 @@ msgstr[0] "Найдена {count} страница"
 msgstr[1] "Найдено {count} страницы"
 msgstr[2] "Найдено {count} страниц"
 
-#: ../mojowka-didi.tmp:489
+#: ../mojowka-didi.tmp:523
 msgid "Find"
 msgstr "Найти"
 
