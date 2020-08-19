@@ -489,6 +489,11 @@ sub search {
         my @files = map { basename $_ } glob "$DATADIR/*";
         $log->debug (sprintf 'performing search on %d files', scalar @files);
         foreach my $f (@files) {
+            if ($f =~ qr/$query/i) {
+                push @$rows, $f;
+                next;
+            }
+
             open my $fd, '<', "$DATADIR/$f" or do {
                 $log->warn ("open: '$DATADIR/$f': $!");
                 next;
