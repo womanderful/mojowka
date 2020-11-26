@@ -34,12 +34,14 @@ use File::Path     'mkpath';
 use Mojo::ByteStream 'b';
 use Mojo::Log;
 use Text::Markdown;
+use IPC::Run3;
 
 our $VERSION=0.05;
 
 my $log = Mojo::Log->new;
 my $DATADIR = $ENV{'MOJOWKA_DIDI_DATADIR'} || '/var/lib/mojowka';
 my $md = Text::Markdown->new;
+my $mmd6 = '/path/to/multimarkdown6';
 my $index_text = <<'EOF';
 ## Welcome to mojowka-didi
 
@@ -113,8 +115,11 @@ get '/set_language/:language' => \&set_language;
 
 post '/preview' => sub {
     my $self = shift;
-    my $text = $self->param ('article') || return;
-    $self->render ('text' => markup ($text));
+    my $title = $self->param ('title');
+    my $text  = $self->param ('article');
+    if (!$title) { $log->warn ('no title'); return; }
+    if (!$text)  { $log->warn ('no text'); return; }
+    $self->render ('text' => markup ($title, $text));
 };
 
 get '/sitemap' => sub {
@@ -241,9 +246,34 @@ Convert lightweight markup into HTML.
 =cut
 
 sub markup {
-    local $_ = shift || return;
+    my ($title, $text) = @_;
+    if (!$title) { $log->warn ('no title'); return; }
+    if (!$text)  { $log->warn ('no text');  return; }
 
-    return $md->markdown ($_);
+    my $ext = (-1 == index $title, '.') ? '' : (split /\./, $title)[-1];
+    if ('md' eq $ext) {
+        return $md->markdown ($text);
+    } elsif ('mmd6' eq $ext) {
+        my ($html, $stderr);
+        eval { run3 [ $mmd6 ], \$text, \$html, \$stderr, { binmode_stdin => ':utf8', binmode_stdout => ':utf8' }; };
+        if ($@) {
+            chomp $@;
+            $log->warn ("multimarkdown failed: '$@'");
+            return $text;
+        } else {
+            if (defined $stderr and length $stderr) {
+                $log->warn ("multimarkdown stderr: '$stderr'");
+            }
+            return $html;
+        }
+    } else {
+        ## minimally quote any possible HTML and wrap the contents between <pre></pre> markers so we get a text/plain output
+        $text =~ s/&/&amp;/g;
+        $text =~ s/</&lt;/g;
+        $text =~ s/>/&gt;/g;
+        $text = "<pre>\n$text</pre>\n";
+        return $text;
+    }
 }
 
 
@@ -323,15 +353,8 @@ sub get_article {
     my $contents; { local $/; $contents = <$fd>; }
     close $fd;
 
-    if ($title !~ /\.md$/) {
-        ## minimally quote any possible HTML and wrap the contents between <pre></pre> markers so we get a text/plain output
-        $contents =~ s/&/&amp;/g;
-        $contents =~ s/</&lt;/g;
-        $contents =~ s/>/&gt;/g;
-        $contents = "<pre>\n$contents</pre>\n";
-    }
     $self->render (
-        'content'   => ($contents ? markup ($contents) : ''),
+        'content'   => ($contents ? markup ($title, $contents) : ''),
         'title'  => $title,
         'layout' => 'default',
         'show_edit' => 1,
@@ -661,7 +684,7 @@ $(document).ready(function() {
         $.ajax({
             url:        '<%= url_for '/preview' %>',
             type:       'post',
-            data:       { article: $('#article').val() },
+            data:       { article: $('#article').val(), title: $('#article_title').val() },
             dataType:   'html',
             success:    function(data, textStatus) {
                 $('div#preview_area').html(data);
@@ -719,7 +742,7 @@ button:hover{border-color:#69c}
 <form method="post" action="<%= url_for "/edit/$article_title" %>">
 <dl>
 <dt><%= $form_dt_title %></dt>
-<dd><input type="text" name="title" value="<%= $article_title %>" readonly=""></dd>
+<dd><input type="text" name="title" id="article_title" value="<%= $article_title %>" readonly=""></dd>
 <dt><%= $form_dt_content %></dt>
 <dd><span id="toolbar">
 <button type="button" id="btn_bold"   title="<%= $form_toolbar_bold_title   %>"><%= $form_toolbar_bold_text   %></button>
